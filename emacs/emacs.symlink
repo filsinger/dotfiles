@@ -1,0 +1,13 @@
+;; This file assumes 'https://github.com/filsinger/emacs-config' is cloned
+;; into '~/.emacs.git/'.
+
+(defvar emacs-sync-path (if (or (eq system-type 'cygwin)
+				(eq system-type 'gnu/linux)
+				(eq system-type 'linux)
+				(eq system-type 'darwin))
+			    (concat (getenv "HOME") "/.emacs.git/")
+			  (concat (getenv "USERPROFILE") "/.emacs.git/"))
+  "emacs sync directory")
+(add-to-list 'load-path emacs-sync-path)
+(load "common-init.el")
+
