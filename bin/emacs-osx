@@ -1,0 +1,7 @@
+#!/bin/sh
+
+EMACS_APP="/Applications/Emacs.app"
+EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
+EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
+
+$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
