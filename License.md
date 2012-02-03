@@ -1,17 +1,17 @@
 # License
 The following files are subject to the MIT License listed below
 Files:
-- Rakefile
-- git/completion.sh
-- zsh/window.zsh
-- zsh/zshrc.symlink
-- zsh/functions/_brew
-- zsh/functions/_c
-- zsh/functions/_git-rm
-- zsh/functions/_rake
-- zsh/functions/c
-- zsh/functions/last_modified
-- zsh/functions/verbose_completion
+- `Rakefile`
+- `git/completion.sh`
+- `zsh/window.zsh`
+- `zsh/zshrc.symlink`
+- `zsh/functions/_brew`
+- `zsh/functions/_c`
+- `zsh/functions/_git-rm`
+- `zsh/functions/_rake`
+- `zsh/functions/c`
+- `zsh/functions/last_modified`
+- `zsh/functions/verbose_completion`
 
 > The MIT License
 >

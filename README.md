@@ -12,3 +12,5 @@ into your home directory.
 My dotfile setup is ~~ripped off of~~ based on [Zach Holman's dotfiles](https://github.com/holman/dotfiles).
 Take a look at [his readme](https://github.com/holman/dotfiles) for more information (I'm too lazy to type more right now).
 
+## license
+See [License](https://github.com/filsinger/dotfiles/blob/master/License.md).
