@@ -1,8 +1,5 @@
-if [[ -n $SSH_CONNECTION ]]; then
-  export PS1='%m:%1~$(git_info_for_prompt) %n➤ '
-else
-  export PS1='%m:%1~$(git_info_for_prompt) %n➤ '
-fi
+PROMPT='%m:%1~ %n➤ '
+RPROMPT='$(git_info_for_prompt)'
 
 ## Shell colours
 export LSCOLORS=gxFxCxDxCxegedabagacad
@@ -48,3 +45,6 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[^N' newtab
 bindkey '^?' backward-delete-char
+
+
+zstyle ':completion:*' menu select
