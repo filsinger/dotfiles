@@ -18,5 +18,7 @@ fi
 autoload -U compinit
 compinit
 
+autoload -U colors && colors
+
 # load every completion after autocomplete loads
 for config_file ($ZSH/**/completion.sh) source $config_file
