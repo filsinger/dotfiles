@@ -1,4 +1,9 @@
-PROMPT='%m:%1~ %n➤ '
+if [[ -n $SSH_CONNECTION ]]; then
+	PROMPT='%{$fg[magenta]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[magenta]%}➤%{$reset_color%} '
+else
+	PROMPT='%{$fg[green]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[green]%}➤%{$reset_color%} '
+#	PROMPT='%m:%1~ %n➤ '
+fi
 RPROMPT='$(git_info_for_prompt)'
 
 ## Shell colours
