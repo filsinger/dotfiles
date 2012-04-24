@@ -1,3 +1,2 @@
-
-git/gitconfig.symlink
+git/*.private*
 
