@@ -4,11 +4,13 @@ export LSCOLORS=gxFxCxDxCxegedabagacad
 
 export PATH=/usr/local/bin:$PATH
 
-source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+if [[ `uname` == 'Darwin' ]]; then
+    source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
 
-# brew bash completion
-if [ -f `brew --prefix`/etc/bash_completion.d/git-completion.bash  ]; then
-    . `brew --prefix`/etc/bash_completion.d/git-completion.bash 
+    # brew bash completion
+    if [ -f `brew --prefix`/etc/bash_completion.d/git-completion.bash  ]; then
+	. `brew --prefix`/etc/bash_completion.d/git-completion.bash
+    fi
 fi
 
 if [ -f ~/.localrc.bash ]; then
