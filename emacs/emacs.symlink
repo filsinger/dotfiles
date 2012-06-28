@@ -1,6 +1,6 @@
 ;; This file assumes 'https://github.com/filsinger/emacs-config' is cloned
 ;; into '~/.emacs.git/'.
-(defvar *emacs-load-start* (current-time))
+(defconst emacs-start-time (current-time))
 
 (if (or (eq system-type 'cygwin)
 	(eq system-type 'gnu/linux)
@@ -11,5 +11,16 @@
 
 (load "common-init.el")
 
-(message "My .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
-				     (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
+;; Timing code is from https://github.com/jwiegley/dot-emacs/blob/master/init.el
+(when window-system
+  (let ((elapsed (float-time (time-subtract (current-time)
+                                            emacs-start-time))))
+    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
+
+  (add-hook 'after-init-hook
+            `(lambda ()
+               (let ((elapsed (float-time (time-subtract (current-time)
+                                                         emacs-start-time))))
+                 (message "Loading %s...done (%.3fs) [after-init]"
+                          ,load-file-name elapsed)))
+            t))
