@@ -2,10 +2,15 @@
 ;; into '~/.emacs.git/'.
 (defconst emacs-start-time (current-time))
 
+;; Turn off mouse interface early in startup to avoid momentary display
+(when window-system
+  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+    (when (fboundp mode) (funcall mode -1))))
+
 (if (or (eq system-type 'cygwin)
-	(eq system-type 'gnu/linux)
-	(eq system-type 'linux)
-	(eq system-type 'darwin))
+		(eq system-type 'gnu/linux)
+		(eq system-type 'linux)
+		(eq system-type 'darwin))
     (add-to-list 'load-path (concat (getenv "HOME") "/.emacs.git/"))
   (add-to-list 'load-path (concat (getenv "USERPROFILE") "/.emacs.git/")))
 
