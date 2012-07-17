@@ -1,0 +1,23 @@
+#!/bin/sh
+
+case "$OSTYPE" in
+	'cygwin')
+		EMACS_BIN="/cygdrive/c/bin/emacs-24.1/bin/runemacs.exe"
+		EMACSCLIENT_BIN="/cygdrive/c/bin/emacs-24.1/bin/emacsclientw.exe"
+		;;
+	'darwin')
+		EMACS_APP="/Applications/Emacs.app"
+		if [ -d "$DIRECTORY" ]; then
+			EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
+			EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
+		fi
+		;;
+esac
+
+if [[ -x $EMACS_BIN ]]; then
+	if [[ -x $EMACSCLIENT_BIN ]]; then
+		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
+	else
+		$EMACS_BIN "$@"
+	fi
+fi
