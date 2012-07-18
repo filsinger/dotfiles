@@ -1,5 +1,13 @@
 #!/bin/sh
 
+function get_pid () {
+	if [[ $OSTYPE == 'cygwin' ]]; then
+			echo `(tasklist /fo CSV | grep $1 | cut -d , -f 2 | cut -d \" -f 2)`
+	else
+			echo `(pidof $1)`
+	fi
+}
+
 case "$OSTYPE" in
 	'cygwin')
 		EMACS_BIN="/cygdrive/c/bin/emacs-24.1/bin/runemacs.exe"
@@ -15,7 +23,11 @@ case "$OSTYPE" in
 esac
 
 if [[ -x $EMACS_BIN ]]; then
-	if [[ -x $EMACSCLIENT_BIN ]]; then
+	if [ -z "$@" ]; then
+		if [ -z $(get_pid "emacs") ]; then
+			$EMACS_BIN
+		fi
+	elif [[ -x $EMACSCLIENT_BIN ]]; then
 		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
 	else
 		$EMACS_BIN "$@"
