@@ -3,7 +3,7 @@
 [git-p4]
 	detectRename = true
 [core]
-	editor = mate -w
+	editor = emacs-run
 	excludesfile = ~/.gitignore
 	autocrlf = input
 [mergetool]
