@@ -1,35 +1,59 @@
 #!/bin/sh
 
-function get_pid () {
-	if [[ $OSTYPE == 'cygwin' ]]; then
-			echo `(tasklist /fo CSV | grep $1 | cut -d , -f 2 | cut -d \" -f 2)`
-	else
-			echo `(pidof $1)`
+# try and detect if we are running from a remote session
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	SESSION_TYPE=remote/ssh
+fi
+
+# If we aren't connected via remote connection
+# lets try and run a graphical version of emacs.
+if [ -z "$SESSION_TYPE" ]; then
+	case "$OSTYPE" in
+		cygwin)
+			EMACS_BIN="/cygdrive/c/bin/emacs-24.1/bin/runemacs.exe"
+			EMACSCLIENT_BIN="/cygdrive/c/bin/emacs-24.1/bin/emacsclientw.exe"
+			;;
+		darwin*)
+			EMACS_APP="/Applications/Emacs.app/"
+			if [ -d "$EMACS_APP" ]; then
+				EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
+				EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
+			fi
+			;;
+		*)
+			;;
+	esac
+fi
+
+# If we haven't set an emacs binary based on platform, try and
+# run a default one (should the terminal version).
+if [ -z $EMACS_BIN ]; then
+	which -s emacs >> /dev/null
+	if [ $?  ]; then
+		EMACS_BIN=`(which emacs)`
 	fi
-}
 
-case "$OSTYPE" in
-	'cygwin')
-		EMACS_BIN="/cygdrive/c/bin/emacs-24.1/bin/runemacs.exe"
-		EMACSCLIENT_BIN="/cygdrive/c/bin/emacs-24.1/bin/emacsclientw.exe"
-		;;
-	'darwin')
-		EMACS_APP="/Applications/Emacs.app"
-		if [ -d "$DIRECTORY" ]; then
-			EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
-			EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
-		fi
-		;;
-esac
-
-if [[ -x $EMACS_BIN ]]; then
-	if [ -z "$@" ]; then
-		if [ -z $(get_pid "emacs") ]; then
-			$EMACS_BIN
-		fi
-	elif [[ -x $EMACSCLIENT_BIN ]]; then
-		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
-	else
-		$EMACS_BIN "$@"
+	which -s emacsclient >> /dev/null
+	if [ -z "$EMACSCLIENT_BIN" ] && [ $? ]; then
+		EMACSCLIENT_BIN=`(which emacsclient)`
 	fi
 fi
+
+# Don't run emacs client if we havent passed any params
+if [ -z "$@" ]; then
+	EMACSCLIENT_BIN=
+fi
+
+# Try and run emacs
+if [[ -x $EMACS_BIN ]]; then
+	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
+		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
+		exit $?
+	else
+		$EMACS_BIN "$@"
+		exit $?
+	fi
+fi
+
+# return an error if we reach this point
+exit 1
