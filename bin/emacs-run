@@ -28,12 +28,12 @@ fi
 # If we haven't set an emacs binary based on platform, try and
 # run a default one (should the terminal version).
 if [ -z $EMACS_BIN ]; then
-	which -s emacs >> /dev/null
+	which emacs >> /dev/null
 	if [ $?  ]; then
 		EMACS_BIN=`(which emacs)`
 	fi
 
-	which -s emacsclient >> /dev/null
+	which emacsclient >> /dev/null
 	if [ -z "$EMACSCLIENT_BIN" ] && [ $? ]; then
 		EMACSCLIENT_BIN=`(which emacsclient)`
 	fi
