@@ -45,7 +45,7 @@ if [ -z "$@" ]; then
 fi
 
 # Try and run emacs
-if [[ -x $EMACS_BIN ]]; then
+if [ -x $EMACS_BIN ]; then
 	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
 		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
 		exit $?
