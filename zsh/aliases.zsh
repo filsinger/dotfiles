@@ -7,3 +7,4 @@ elif [[ "$unamestr" == "Darwin" ]]; then
 
 fi
 
+alias edit='emacs-run'
