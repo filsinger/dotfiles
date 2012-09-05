@@ -47,3 +47,7 @@ Thumbs.db
 ################
 *~
 .#*
+
+# csearch files #
+################
+.csearchindex
