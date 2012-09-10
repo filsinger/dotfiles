@@ -1,11 +1,19 @@
 # shortcut to this dotfiles path is $DOTFILES
 export DOTFILES=$HOME/.dotfiles
+export PRIVATE_DOTFILES=$HOME/.private.dotfiles
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/Development
 
 # source every .zsh file in this rep
 for config_file ($DOTFILES/**/*.zsh) source $config_file
+
+# source every .zsh file in the '$PRIVATE_DOTFILES' folder.
+# The '$PRIVATE_DOTFILES' is for computer specific private config stuff
+if [[ -d $PRIVATE_DOTFILES ]]
+then
+	for config_file ($PRIVATE_DOTFILES/**/*.zsh) source $config_file
+fi
 
 # use .localrc.zsh for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
