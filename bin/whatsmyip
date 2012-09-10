@@ -1,4 +1,9 @@
 #!/bin/sh
 
 echo "Internet :" $(dig +short myip.opendns.com @resolver1.opendns.com)
-echo "Local    :" $(ipconfig getifaddr en1)
+if [[ -z $(ipconfig getifaddr en1) ]]
+then
+	echo "Local    :" $(ipconfig getifaddr en0)
+else
+	echo "Local    :" $(ipconfig getifaddr en1)
+fi
