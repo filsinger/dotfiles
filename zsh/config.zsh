@@ -9,8 +9,8 @@ RPROMPT='$(git_info_for_prompt)'
 export LSCOLORS=gxFxCxDxCxegedabagacad
 export CLICOLOR=true
 
-fpath=(~/.dotfiles/zsh/functions $fpath)
-[[ -d ~/.dotfiles/zsh/functions/ ]] && autoload -U ~/.dotfiles/zsh/functions/*(:t)
+fpath=($DOTFILES/zsh/functions $fpath)
+[[ -d $DOTFILES/zsh/functions/ ]] && autoload -U $DOTFILES/zsh/functions/*(:t)
 
 # History Information
 HISTFILE=~/.zsh_history
