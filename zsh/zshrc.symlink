@@ -10,14 +10,20 @@ for config_file ($DOTFILES/**/*.zsh) source $config_file
 
 # source every .zsh file in the '$PRIVATE_DOTFILES' folder.
 # The '$PRIVATE_DOTFILES' is for computer specific private config stuff
-if [[ -d $PRIVATE_DOTFILES ]]
+if [ -d $PRIVATE_DOTFILES ]
 then
+	if [ ! -f $PRIVATE_DOTFILES/dummy.zsh ]
+	then
+		# Just in case we don't have any .zsh files in the $PRIVATE_DOTFILES directory, create a dummy one to
+		# keep the glob a couple lines down from complaining.
+		echo \#"This is a dummy file (do not add anything to it)" > $PRIVATE_DOTFILES/dummy.zsh
+	fi
 	for config_file ($PRIVATE_DOTFILES/**/*.zsh) source $config_file
 fi
 
 # use .localrc.zsh for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
-if [[ -a ~/.localrc.zsh ]]
+if [ -e ~/.localrc.zsh ]
 then
   source ~/.localrc.zsh
 fi
