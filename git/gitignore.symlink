@@ -39,7 +39,7 @@ ehthumbs.db
 Thumbs.db
 
 # VCS files #
-################
+#############
 .svn
 
 
@@ -49,5 +49,12 @@ Thumbs.db
 .#*
 
 # csearch files #
-################
+#################
 .csearchindex
+
+# gnu global #
+##############
+GPATH
+GRTAGS
+GSYMS
+GTAGS
