@@ -11,6 +11,9 @@ export CLICOLOR=true
 
 fpath=($DOTFILES/zsh/functions $fpath)
 [[ -d $DOTFILES/zsh/functions/ ]] && autoload -U $DOTFILES/zsh/functions/*(:t)
+[[ -d $PRIVATE_DOTFILES/zsh/functions/ ]] && fpath=($PRIVATE_DOTFILES/zsh/functions $fpath)
+[[ -d $PRIVATE_DOTFILES/zsh/functions/ ]] && autoload -U $PRIVATE_DOTFILES/zsh/functions/*(:t)
+
 
 # History Information
 HISTFILE=~/.zsh_history
