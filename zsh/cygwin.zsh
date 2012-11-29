@@ -5,5 +5,8 @@ if [[ $OSTYPE == 'cygwin' ]]; then
 	bindkey '\e[4~' end-of-line
 
     alias ls="ls --color=auto"
+
+	# ignore dll files when autocompleting
+	zstyle ':completion:*:complete:-command-:*' ignored-patterns '*.dll'
 fi
 
