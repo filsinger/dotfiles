@@ -1,0 +1,2 @@
+setw -g mode-mouse on  # Enable mouse usage
+set -g base-index 1	   # Start window numbering at 1
