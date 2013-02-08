@@ -2,7 +2,7 @@
 export CLICOLOR=1
 export LSCOLORS=gxFxCxDxCxegedabagacad
 
-export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
 if [[ `uname` == 'Darwin' ]]; then
     source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
