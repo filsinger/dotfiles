@@ -1,9 +1,45 @@
 #!/bin/sh
 
-echo "Internet :" $(dig +short myip.opendns.com @resolver1.opendns.com)
-if [[ -z $(ipconfig getifaddr en1) ]]
+print_external_ip()
+{
+	prefix=""
+	if [[ $# == 1 ]]
+	then
+	    prefix="Internet : "
+	fi
+
+	echo "$prefix"$(dig +short myip.opendns.com @resolver1.opendns.com)
+}
+
+print_local_ip()
+{
+	prefix=""
+	if [[ $# == 1 ]]
+	then
+	    prefix="Local    : "
+	fi
+
+	if [[ -z $(ipconfig getifaddr en1) ]]
+	then
+		echo "$prefix"$(ipconfig getifaddr en0)
+	else
+		echo "$prefix"$(ipconfig getifaddr en1)
+	fi
+}
+
+if [[ $# == 0 ]]
 then
-	echo "Local    :" $(ipconfig getifaddr en0)
+	print_external_ip -v
+	print_local_ip -v
 else
-	echo "Local    :" $(ipconfig getifaddr en1)
+
+	if [[ $1 == '-e' ]]
+	then
+		print_external_ip
+	fi
+
+	if [[ $1 == '-l' ]]
+	then
+		print_local_ip
+	fi
 fi
