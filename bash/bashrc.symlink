@@ -20,6 +20,6 @@ fi
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 if [ -f ~/.rvm/scripts/rvm ]; then
     . ~/.rvm/scripts/rvm
-elif if [ -f /usr/local/rvm/scripts/rvm ]; then
+elif [ -f /usr/local/rvm/scripts/rvm ]; then
     . ~/usr/local/rvm/scripts/rvm
 fi
