@@ -21,15 +21,11 @@ then
 	for config_file ($PRIVATE_DOTFILES/**/*.zsh) source $config_file
 fi
 
-# use .localrc.zsh for SUPER SECRET CRAP that you don't
-# want in your public, versioned repo.
-if [ -e ~/.localrc.zsh ]
-then
-  source ~/.localrc.zsh
+# only do the following if running interactively
+if [[ -n "$PS1" ]]; then
+	# initialize autocomplete here, otherwise functions won't be loaded
+	autoload -U compinit
+	compinit
+
+	autoload -U colors && colors
 fi
-
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
-
-autoload -U colors && colors
