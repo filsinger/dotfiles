@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # only do the following if running interactively
 if [[ -n "$PS1" ]]; then
 	if [[ $OSTYPE == 'cygwin' ]]; then
