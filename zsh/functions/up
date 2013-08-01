@@ -1,0 +1,15 @@
+up() {
+    echo $(pwd)
+    if [[ $1 == "" ]]
+        then
+            newdir=/
+        else
+            local newdir=$(dirname $(pwd))
+    fi
+    while [[ "$(basename $newdir)" != *$1* ]] && [[ "$(basename $newdir)" != "/" ]]
+    do
+        newdir=$(dirname $newdir)
+    done
+    echo $newdir
+    cd $newdir
+}
