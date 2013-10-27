@@ -11,6 +11,11 @@
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	s = status --short --branch
+    ll = log --pretty=format:'%Cred%h%C(yellow)%d%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>' --decorate --numstat
+    filelog = log -u
+    gr = grep -Ii
+    wdiff = diff --word-diff
+    who = shortlog -n -s --no-merges
 [include]
 	path = .gitconfig.private
 
