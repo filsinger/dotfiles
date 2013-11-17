@@ -8,6 +8,7 @@ RPROMPT='$(git_info_for_prompt)'
 ## Shell colours
 export LSCOLORS=gxFxCxDxCxegedabagacad
 export CLICOLOR=true
+export TERM=xterm-256color
 
 [[ -d /usr/local/share/zsh-completions ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d $DOTFILES/zsh/functions ]] && fpath=($DOTFILES/zsh/functions $fpath)
