@@ -46,6 +46,9 @@ if [[ -n "$PS1" ]]; then
 	#   like: git comm-[tab]
 	setopt complete_aliases
 
+	bindkey -e
+	bindkey '^[[1;5C' forward-word
+	bindkey '^[[1;5D' backward-word
 	bindkey '^[^[[D' backward-word
 	bindkey '^[^[[C' forward-word
 	bindkey '^[[5D' beginning-of-line
