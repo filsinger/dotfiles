@@ -18,6 +18,7 @@
     who = shortlog -n -s --no-merges
 [include]
 	path = .gitconfig.private
-
 [push]
 	default = simple
+[diff "csv"]
+	wordRegex = [^,\n]+[,\n]|[,]
