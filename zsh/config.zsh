@@ -6,7 +6,7 @@ fi
 RPROMPT='$(git_info_for_prompt)'
 
 ## Shell colours
-export LSCOLORS=gxFxCxDxCxegedabagacad
+export LSCOLORS=exfxbxdxcxBxDxabagacad
 export CLICOLOR=true
 export TERM=xterm-256color
 

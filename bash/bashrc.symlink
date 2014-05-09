@@ -1,6 +1,6 @@
 ## Shell colours
 export CLICOLOR=1
-export LSCOLORS=gxFxCxDxCxegedabagacad
+export LSCOLORS=exfxbxdxcxBxDxabagacad
 
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
