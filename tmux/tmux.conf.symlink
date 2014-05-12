@@ -22,8 +22,7 @@ set -g mouse-resize-pane on
 set -g mouse-select-window on
 
 # keybindings
-bind-key k send-keys C-l
-bind-key K send-keys C-c \; send-keys C-l
+bind-key k send-keys C-c \; send-keys C-l \; run-shell 'sleep .3s' \; clear-history
 
 # window notifications
 setw -g monitor-activity on
