@@ -40,7 +40,12 @@ if [ -z $EMACS_BIN ]; then
 fi
 
 # Don't run emacs client if we havent passed any params
-if [ -z "$@" ]; then
+if [[ -z "$@" ]]; then
+	EMACSCLIENT_BIN=
+fi
+
+# Don't run emacs client if trying to evaluate an expression'
+if [[ "$@" == *--eval* ]]; then
 	EMACSCLIENT_BIN=
 fi
 
