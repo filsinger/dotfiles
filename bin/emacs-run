@@ -14,10 +14,12 @@ if [ -z "$SESSION_TYPE" ]; then
 			EMACSCLIENT_BIN="/cygdrive/c/bin/emacs-24.1/bin/emacsclientw.exe"
 			;;
 		darwin*)
-			EMACS_APP="/Applications/Emacs.app/"
-			if [ -d "$EMACS_APP" ]; then
-				EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
-				EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
+			if [[ -z "$TMUX_PANE" ]]; then # don't try and open the emacs.app version if within a tmux session
+				EMACS_APP="/Applications/Emacs.app/"
+				if [ -d "$EMACS_APP" ]; then
+					EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
+					EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
+				fi
 			fi
 			;;
 		*)
