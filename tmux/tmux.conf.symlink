@@ -25,7 +25,7 @@ set -g mouse-select-window on
 bind-key k send-keys C-c \; send-keys C-l \; run-shell 'sleep .3s' \; clear-history
 bind '"' split-window -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
-bind c new-window -c "#{pane_current_path}"'"'
+bind C new-window -c "#{pane_current_path}"
 
 # window notifications
 setw -g monitor-activity on
