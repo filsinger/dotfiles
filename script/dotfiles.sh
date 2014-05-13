@@ -11,16 +11,16 @@ function print_title {
 	printf "\e[36m==>\e[0m \e[1m$1\e[0m\n"
 }
 
-function get_dotfile_platform_suffix {
+function get_platform {
 	case $(uname) in
 		Darwin)
-			echo 'osx'
+			echo osx
 			;;
-		cygwin)
-			echo 'cygwin'
+		cygwin | CYGWIN*)
+			echo cygwin
 			;;
 		Linux)
-			echo 'linux'
+			echo linux
 			;;
 	esac
 }
@@ -34,7 +34,7 @@ function check_for_package {
 }
 
 function install_brew() {
-	if [[ $(uname) == 'Darwin' ]]; then
+	if [[ $(get_platform) == 'osx' ]]; then
 		print_title 'Installing Homebrew'
 
 	   if [[ $(check_for_package "brew") == '0' ]]; then
@@ -48,8 +48,8 @@ function install_brew() {
 }
 
 function install_package {
-	case $(uname) in
-		'Darwin')
+	case $(get_platform) in
+		osx)
 			brew install $1
 			;;
 		*)
@@ -66,11 +66,11 @@ function install_packages()
 	package_list_linux=$package_list_common" "
 	package_list_cygwin=$package_list_common" "
 	package_list=""
-	case $(uname) in
-		'Darwin')
+	case $(get_platform) in
+	    osx)
 			package_list=$package_list_osx
 			;;
-		'cygwin')
+		cygwin | CYGWIN*)
 			package_list=$package_list_cygwin
 			;;
 		*)
@@ -83,10 +83,16 @@ function install_packages()
 	echo "done"
 }
 
-function get_dotfile_target_name {
+function get_dotfile_symlink_target_name {
 	filename_base=$(basename $1)
 	echo ".${filename_base%.symlink*}"
 }
+
+function get_dotfile_copyfile_target_name {
+	filename_base=$(basename $1)
+	echo ".${filename_base%.copyfile*}"
+}
+
 
 function backup_file {
 	if [ ! -d "$dotfiles_backup_path" ]; then
@@ -98,7 +104,7 @@ function backup_file {
 	if [ -e "$file_to_backup" ]; then
 		if [ -d "$dotfiles_backup_path" ]; then
 			printf "[\e[34mbacking up\e[0m]: $file_to_backup \e[90m->\e[0m $backup_file\n"
-			mv "$file_to_backup" "$backup_file"
+			mv -f "$file_to_backup" "$backup_file"
 			if [ $? -ne 0 ]; then
 				echo "backup failed"
 				exit 1
@@ -109,7 +115,7 @@ function backup_file {
 
 function link_symlinks {
 	# build a list of all files to symlink
-	dotfile_platform_suffix=$(get_dotfile_platform_suffix)
+	dotfile_platform_suffix=$(get_platform)
 	dotfiles_to_link="$(find $dotfiles_path -name '*.symlink') $(find $dotfiles_path -name *.symlink.$dotfile_platform_suffix)"
 
 	if [[ $dotfiles_to_link != " " ]]; then
@@ -117,7 +123,7 @@ function link_symlinks {
 
 		# symlink the dotfiles
 		for source_file in $dotfiles_to_link; do
-			target_file="$HOME/$(get_dotfile_target_name $source_file)"
+			target_file="$HOME/$(get_dotfile_symlink_target_name $source_file)"
 			backup_file="$dotfiles_backup_path/backup$(basename $target_file)"
 			if [ -L "$target_file" ]; then
 				printf "[\e[33mskipping\e[0m] \e[0m$(basename $source_file)\e[0m \e[90m->\e[0m ~/\e[0m$(basename $target_file)\e[0m\n"
@@ -132,22 +138,23 @@ function link_symlinks {
 }
 
 function copy_copyfiles {
-	dotfile_platform_suffix=$(get_dotfile_platform_suffix)
+	dotfile_platform_suffix=$(get_platform)
+	echo "platform suffix: $dotfile_platform_suffix"
 	dotfiles_to_copy="$(find $dotfiles_path -name '*.copyfile') $(find $dotfiles_path -name *.copyfile.$dotfile_platform_suffix)"
 
 	if [[ $dotfiles_to_copy != " " ]]; then
 		print_title 'Copying Hard Files'
 
 		for source_file in $dotfiles_to_copy; do
-			target_file="$HOME/$(get_dotfile_target_name $source_file)"
+			target_file="$HOME/$(get_dotfile_copyfile_target_name $source_file)"
 			backup_file="$dotfiles_backup_path/backup$(basename $target_file)"
-			if [ -a "$target_file" ]; then
-				echo "[skipping] $(basename $source_file) -> ~/$(basename $target_file)"
-			else
+			# if [ -a "$target_file" ]; then
+			# 	echo "[skipping] $(basename $source_file) -> ~/$(basename $target_file)"
+			# else
 				backup_file "$target_file"
 				echo "[copying] $(basename $source_file) -> ~/$(basename $target_file)"
 				cp -f "$source_file" "$target_file"
-			fi
+			#fi
 		done
 	fi
 }
