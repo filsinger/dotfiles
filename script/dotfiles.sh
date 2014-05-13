@@ -139,7 +139,6 @@ function link_symlinks {
 
 function copy_copyfiles {
 	dotfile_platform_suffix=$(get_platform)
-	echo "platform suffix: $dotfile_platform_suffix"
 	dotfiles_to_copy="$(find $dotfiles_path -name '*.copyfile') $(find $dotfiles_path -name *.copyfile.$dotfile_platform_suffix)"
 
 	if [[ $dotfiles_to_copy != " " ]]; then
