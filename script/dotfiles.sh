@@ -1,6 +1,6 @@
 #!/bin/sh
 
-srcipt_time_start=$(date +%s.%N)
+script_time_start=$(date +%s)
 
 pushd $(dirname $0)/.. > /dev/null
 dotfiles_path="$(PWD)"
@@ -173,7 +173,7 @@ function unlink_symlinks {
 
 function print_summary {
 	print_title 'Summary'
-	srcipt_time_end=$(date +%s.%N)
+	script_time_end=$(date +%s)
 	runtime=$((script_time_end-script_time_start))
 	printf "$(basename $0) executed in $runtime seconds\n"
 }
