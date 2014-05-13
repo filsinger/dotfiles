@@ -3,7 +3,7 @@ if [[ -n "$PS1" ]]; then
 	alias reload!='. ~/.zshrc'
 
     case "$(uname)" in
-		Linux | cygwin)
+		Linux | cygwin | CYGWIN*)
 			alias ls='ls --color=auto'
 		;;
 	esac
