@@ -1,13 +1,3 @@
-if [[ -n $SSH_CONNECTION ]]; then
-	PROMPT='%{$fg[magenta]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[magenta]%}❯%{$reset_color%} '
-else
-	if [[ -n $TMUX ]]; then
-		PROMPT='%{$fg[blue]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-	else
-		PROMPT='%{$fg[green]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[green]%}❯%{$reset_color%} '
-	fi
-fi
-
 ## Shell colours
 export LSCOLORS=exfxbxdxcxBxDxabagacad
 export CLICOLOR=true
@@ -20,6 +10,15 @@ export CLICOLOR=true
 
 # only do the following if running interactively
 if [[ -n "$PS1" ]]; then
+	if [[ -n $SSH_CONNECTION ]]; then
+		PROMPT='%{$fg[magenta]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[magenta]%}❯%{$reset_color%} '
+	else
+		if [[ -n $TMUX ]]; then
+			PROMPT='%{$fg[blue]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
+		else
+			PROMPT='%{$fg[green]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[green]%}❯%{$reset_color%} '
+		fi
+	fi
 
 	autoload -Uz vcs_info
 	zstyle ':vcs_info:*' enable git hg
