@@ -2,7 +2,6 @@
 export LSCOLORS=exfxbxdxcxBxDxabagacad
 export CLICOLOR=true
 
-[[ -d /usr/local/share/zsh-completions ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d $DOTFILES/zsh/functions ]] && fpath=($DOTFILES/zsh/functions $fpath)
 [[ -d $DOTFILES/zsh/functions/ ]] && autoload -U $DOTFILES/zsh/functions/*(:t)
 [[ -d $PRIVATE_DOTFILES/zsh/functions/ ]] && fpath=($PRIVATE_DOTFILES/zsh/functions $fpath)
@@ -33,6 +32,8 @@ if [[ -n "$PS1" ]]; then
 	}
 
 	RPROMPT='${vcs_info_msg_0_}'
+
+	[[ -d /usr/local/share/zsh-completions ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
 	# History Information
 	HISTFILE=~/.zsh_history
