@@ -26,6 +26,7 @@ bind k send-keys C-c \; send-keys C-l \; run-shell 'sleep .3s' \; clear-history
 bind '"' split-window -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
 bind C new-window -c "#{pane_current_path}"
+bind C-m command-prompt -p "man:" "split-window -h 'exec man %%'"
 
 # window notifications
 setw -g monitor-activity on
