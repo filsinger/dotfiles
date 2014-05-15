@@ -1,0 +1,44 @@
+#!/bin/sh
+
+movie_source="$1"
+movie_start_time="$2"
+movie_duration="$3"
+
+temp_folder="$(mktemp -d /tmp/movie2gif.XXXXXX)"
+output_filename="animation-$(date +"%Y%m%d").gif"
+if [ -n "$4" ]; then
+	output_filename="$4"
+fi
+
+printf "Movie 2 GIF\n"
+
+movie_url=$(echo "$1" | egrep '^https?://.+')
+echo "movie_url: $movie_url"
+if [ -n "$movie_url" ]; then
+	youtubedl="$(which youtube-dl)"
+	if [ "$?" -ne 0 ]; then
+	   rm -rf "$temp_folder"
+	   exit 1
+	fi
+
+	movie_source="$temp_folder/movie.mp4"
+	$youtubedl "$movie_url" -o "$movie_source"
+	if [ "$?" -ne 0 ]; then
+	   rm -rf "$temp_folder"
+	   exit 1
+	fi
+fi
+
+# printf "temp  : $temp_folder\n"
+# printf "source: $movie_source\n"
+# printf "output: $output_filename\n"
+
+movie_fps=$(ffmpeg -i "$movie_source" 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
+
+printf "Converting movie...\n"
+ffmpeg -t "$movie_duration" -ss "$movie_start_time" -i "$movie_source" "$temp_folder/out%04d.gif" 2> "$temp_folder/ffmpeg-error.txt"
+
+convert -delay 1x$movie_fps -loop 0 "$temp_folder/out%04d.gif" "$output_filename"
+
+rm -rf "$temp_folder"
+printf "Done\n"
