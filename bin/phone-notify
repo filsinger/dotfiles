@@ -1,0 +1,78 @@
+#!/bin/bash
+#       Notify by Boxcar
+#       http://www.process-one.net
+
+usage() {
+        echo -e "\nUsage: $0 -a AccessToken -t MessageTitle -d MessageDetails -s SoundID"
+        echo -e "Example: -$0 -a LuckJewacat6 -t \"Some message\" -d \"Message details\" -s 21\n"
+        exit 1;
+
+}
+
+set_token() {
+	echo "$1" > "$HOME/.boxcar_token"
+}
+
+title=$(uname -n)
+soundid="0"
+
+while [ $# -ge 1 ]; do
+    case "$1" in
+        --)
+            # No more options left.
+            shift
+            break
+            ;;
+		--set-token)
+			set_token "$2"
+			shift
+			;;
+		-t|--title)
+			title="$2"
+			shift
+			;;
+        -m|--message)
+			details="$2"
+            shift
+            ;;
+		--stdin)
+			use_stdin=1
+			;;
+        -h)
+            usage
+            exit 0
+            ;;
+    esac
+
+    shift
+done
+
+if [ -z "$details" ]; then
+	while read -r -d '' line
+	do
+		echo "X${line}${line}X"
+	done
+	details="$line"
+fi
+
+if [ -a "$HOME/.boxcar_token" ]; then
+	token=$(cat "$HOME/.boxcar_token")
+else
+	echo "AuthToken not set"
+	echo " run:  $0 --set-token [AuthToken]"
+	exit 1
+fi
+
+if [ -z "$token" ]; then echo -e "\nMissing AuthToken. See you Boxcar App Settings!"; usage;fi
+if [ -z "$title" ]; then echo -e "\nMissing Title. Provide some text to display in push message!"; usage;fi
+if [ -z "$details" ]; then echo -e "\nMissing MessageDetails. This is displayed in detail view of Boxcar App"; usage;fi
+if [ -z "$soundid" ]; then echo -e "\nMissing SoundID. This is integer number. Test yourself!"; usage;fi
+
+curl --silent -d user_credentials=$token \
+	 -d "notification[title]=$title" \
+	 -d "notification[message]=$title" \
+	 -d "notification[long_message]=$details" \
+	 -d "notification[sound]=$soundid" \
+	 https://new.boxcar.io/api/notifications > /dev/null
+
+exit 0
