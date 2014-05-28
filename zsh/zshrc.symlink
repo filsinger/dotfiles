@@ -22,6 +22,8 @@ then
 	for config_file ($PRIVATE_DOTFILES/**/*.zsh) source $config_file
 fi
 
+autoload -U zmv
+
 # only do the following if running interactively
 if [[ -n "$PS1" ]]; then
 	# initialize autocomplete here, otherwise functions won't be loaded
