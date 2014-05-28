@@ -28,6 +28,7 @@ bind % split-window -h -c "#{pane_current_path}"
 bind C new-window -c "#{pane_current_path}"
 bind C-m command-prompt -p "man:" "split-window -h 'exec man %%'"
 bind C-s command-prompt -p "ssh:" "new-window -n %1 'ssh %1'"
+bind u capture-pane \; save-buffer /tmp/tmux-buffer \; new-window -n "urlview" '$SHELL -c "urlview < /tmp/tmux-buffer"'
 
 # window notifications
 setw -g monitor-activity on
