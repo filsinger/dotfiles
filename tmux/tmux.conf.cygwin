@@ -1,1 +1,7 @@
 # cygwin specific configuration options
+
+# To copy:
+bind-key -n -t emacs-copy M-w copy-pipe "cat > /dev/clipboard"
+
+# To paste:
+bind ] run "cat /dev/clipboard | tmux load-buffer - ; tmux paste-buffer"
