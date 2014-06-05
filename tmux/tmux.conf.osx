@@ -1,0 +1,5 @@
+# To copy:
+if-shell "which reattach-to-user-namespace > /dev/null" 'bind-key -n -t emacs-copy M-w copy-pipe "reattach-to-user-namespace pbcopy"'
+
+# To paste:
+if-shell "which reattach-to-user-namespace > /dev/null" 'bind ] run "reattach-to-user-namespace pbpaste | tmux load-buffer - ; tmux paste-buffer"'
