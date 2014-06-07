@@ -1,6 +1,7 @@
 BoldAsFont=no
 Transparency=off
 CursorType=line
+BackspaceSendsBS=yes
 Font=Monaco
 Columns=160
 Rows=40
