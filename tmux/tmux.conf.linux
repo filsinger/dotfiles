@@ -1,1 +1,6 @@
 # linux specific configuration options
+
+# copy
+if-shell '[[ -n $DISPLAY ]]' 'bind -n -t emacs-copy M-w copy-pipe "xclip -i -sel p -f | xclip -i -sel c "'
+# paste
+if-shell '[[ -n $DISPLAY ]]' 'bind -n C-y run "xclip -o | tmux load-buffer - ; tmux paste-buffer"'
