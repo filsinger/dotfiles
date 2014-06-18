@@ -27,6 +27,11 @@ set -g mouse-resize-pane on
 set -g mouse-select-window on
 
 # keybindings
+bind -t emacs-copy    C-Left previous-word
+bind -t emacs-copy   C-Right next-word-end
+bind -t emacs-copy  C-S-Left previous-space
+bind -t emacs-copy C-S-Right next-space
+
 bind k send-keys C-c \; send-keys C-l \; run-shell 'sleep .3s' \; clear-history
 bind '"' split-window -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
