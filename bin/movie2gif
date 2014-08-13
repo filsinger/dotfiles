@@ -1,8 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 movie_source="$1"
 movie_start_time="$2"
 movie_duration="$3"
+
+if [[ -z "$movie_source" || -z "$movie_start_time" || -z "$movie_duration" ]]; then
+	echo "${0:t} usage"
+	echo "  ${0:t} [movie_url] [start_time] [duration]"
+	echo '     Times can be specified in seconds or in hh:mm:ss[.xx] form'
+	echo ''
+	exit 1
+fi
 
 temp_folder="$(mktemp -d /tmp/movie2gif.XXXXXX)"
 output_filename="animation-$(date +"%Y%m%d").gif"
