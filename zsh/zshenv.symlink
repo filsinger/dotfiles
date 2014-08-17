@@ -8,6 +8,19 @@ export MANPATH="/usr/local/man:$MANPATH"
 export PROJECTS=~/Development
 export EDITOR=~/.dotfiles/bin/emacs-run
 
+if [[ $(uname) == 'Darwin' ]] then
+	# add paths for these brew formulas
+	brew_formulas=( "node" "ruby" )
+
+	for formula in "${brew_formulas[@]}"
+	do
+		formula_bin_path="$(/usr/local/bin/brew --prefix $formula)"
+		if [[ $? == 0 ]] then
+			export PATH="$formula_bin_path/bin:$PATH"
+		fi
+	done
+fi
+
 # Add RVM to PATH for scripting
 if [ -d $HOME/.rvm/bin ]
 then
