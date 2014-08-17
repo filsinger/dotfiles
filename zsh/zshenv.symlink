@@ -1,0 +1,20 @@
+# shortcut to this dotfiles path is $DOTFILES
+export DOTFILES=$HOME/.dotfiles
+export PRIVATE_DOTFILES=$HOME/.private.dotfiles
+
+export PATH="$HOME/bin:$HOME/.dotfiles/bin:/usr/local/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin"
+export MANPATH="/usr/local/man:$MANPATH"
+
+export PROJECTS=~/Development
+export EDITOR=~/.dotfiles/bin/emacs-run
+
+# Add RVM to PATH for scripting
+if [ -d $HOME/.rvm/bin ]
+then
+   export PATH=$PATH:$HOME/.rvm/bin
+   source $HOME/.rvm/scripts/rvm
+elif [ -d /usr/local/rvm/bin ]
+then
+   export PATH=$PATH:/usr/local/rvm/bin
+   source /usr/local/rvm/scripts/rvm
+fi
