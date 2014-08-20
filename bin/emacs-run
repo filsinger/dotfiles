@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # try and detect if we are running from a remote session
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
