@@ -8,7 +8,7 @@ export MANPATH="/usr/local/man:$MANPATH"
 export PROJECTS=~/Development
 export EDITOR=~/.dotfiles/bin/emacs-run
 
-if [[ $(uname) == 'Darwin' ]] then
+if [[ $(/usr/bin/uname) == 'Darwin' ]] then
 	# add paths for these brew formulas
 	brew_formulas=( "node" "ruby" )
 
