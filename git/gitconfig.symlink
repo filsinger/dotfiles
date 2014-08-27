@@ -16,6 +16,7 @@
     gr = grep -Ii
     wdiff = diff --word-diff
     who = shortlog -n -s --no-merges
+    ldf = "!f() { git diff --name-only \"$(git merge-base HEAD master)\"; }; f"
 [include]
 	path = .gitconfig.private
 [push]
