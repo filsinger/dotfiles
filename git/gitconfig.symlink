@@ -16,7 +16,7 @@
     gr = grep -Ii
     wdiff = diff --word-diff
     who = shortlog -n -s --no-merges
-    ldf = "!f() { git diff --name-only \"$(git merge-base HEAD master)\"; }; f"
+    ldf = "!git diff --diff-filter=MARC --name-only \"$(git merge-base HEAD ${1:-master})\""
 [include]
 	path = .gitconfig.private
 [push]
