@@ -3,7 +3,7 @@
 script_time_start=$(date +%s)
 
 pushd $(dirname $0)/.. > /dev/null
-dotfiles_path="$(PWD)"
+dotfiles_path="$(pwd)"
 dotfiles_backup_path="$dotfiles_path/.backup"
 popd > /dev/null
 
