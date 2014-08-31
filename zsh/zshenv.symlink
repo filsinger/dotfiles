@@ -19,7 +19,13 @@ if [[ $(/usr/bin/uname) == 'Darwin' ]] then
 			export PATH="$formula_bin_path/bin:$PATH"
 		fi
 	done
+
+    # add paths for latex
+	if [[ -d "/usr/local/texlive/2014/bin/x86_64-darwin" ]] then
+		export PATH="$PATH:/usr/local/texlive/2014/bin/x86_64-darwin"
+	fi
 fi
+
 
 # Add RVM to PATH for scripting
 if [ -d $HOME/.rvm/bin ]
