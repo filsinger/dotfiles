@@ -10,9 +10,9 @@
     (when (fboundp mode) (funcall mode -1))))
 
 (if (or (eq system-type 'cygwin)
-		(eq system-type 'gnu/linux)
-		(eq system-type 'linux)
-		(eq system-type 'darwin))
+        (eq system-type 'gnu/linux)
+        (eq system-type 'linux)
+        (eq system-type 'darwin))
     (add-to-list 'load-path (concat (getenv "HOME") "/.emacs.git/"))
   (add-to-list 'load-path (concat (getenv "USERPROFILE") "/.emacs.git/")))
 
