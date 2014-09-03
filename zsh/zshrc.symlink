@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 # source every .zsh file in this rep
 for config_file ($DOTFILES/**/*.zsh) source $config_file
 

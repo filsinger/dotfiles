@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 # tmux pane words from: https://gist.github.com/blueyed/6856354
 # complete words from tmux pane(s)
 # Source: http://blog.plenz.com/2012-01/zsh-complete-words-from-tmux-pane.html

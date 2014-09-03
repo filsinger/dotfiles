@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 if [[ $(uname) == 'Darwin' ]] then
 
 	android_sdk_path="$(/usr/local/bin/brew --prefix android-sdk)"

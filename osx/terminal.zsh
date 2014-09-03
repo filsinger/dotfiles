@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 # Add the proxy icon in the Terminal titlebar on OSX
 #
 # This idea came from here: http://hints.macworld.com/article.php?story=20110722211753852

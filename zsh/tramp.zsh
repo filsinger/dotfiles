@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 # This fixes a problem where tramp hangs when trying to
 # edit a remote file in emacs using tramp.
 #

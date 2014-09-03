@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 ## Shell colours
 export LSCOLORS=exfxbxdxcxBxDxabagacad
 export CLICOLOR=true

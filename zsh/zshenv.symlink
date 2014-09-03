@@ -1,3 +1,5 @@
+# -*- mode: shell-script; -*-
+
 # shortcut to this dotfiles path is $DOTFILES
 export DOTFILES=$HOME/.dotfiles
 export PRIVATE_DOTFILES=$HOME/.private.dotfiles

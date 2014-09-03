@@ -1,3 +1,5 @@
+# -*- mode: conf-space; -*-
+
 # force a reload of the config file
 unbind r
 bind r source-file ~/.tmux.conf
