@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp; -*-
+
 ;; This file assumes 'https://github.com/filsinger/emacs-config' is cloned
 ;; into '~/.emacs.git/'.
 (defconst emacs-start-time (current-time))
