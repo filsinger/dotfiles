@@ -75,4 +75,11 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^?' backward-delete-char
 
 	zstyle ':completion:*' menu select
+
+	# online help
+	if [ -d '/usr/local/share/zsh/helpfiles' ]; then
+		unalias run-help
+		autoload run-help
+		HELPDIR=/usr/local/share/zsh/helpfiles
+	fi
 fi
