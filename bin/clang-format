@@ -6,6 +6,8 @@ elif [[ -x "/usr/bin/clang-format" ]]; then
 	/usr/bin/clang-format $@	
 elif [[ -x "/usr/local/bin/clang-format" ]]; then
 	/usr/local/bin/clang-format $@	
+elif [[ -x "/usr/bin/clang-format-3.5" ]]; then
+	/usr/bin/clang-format-3.5 $@	
 else
 	exit 1
 fi
