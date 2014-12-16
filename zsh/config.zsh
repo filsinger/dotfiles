@@ -76,6 +76,10 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^[^N' newtab
 	bindkey '^?' backward-delete-char
 
+	autoload -z edit-command-line
+	zle -N edit-command-line
+	bindkey "^X^E" edit-command-line
+
 	zstyle ':completion:*' menu select
 
 	# online help
