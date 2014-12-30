@@ -4,7 +4,7 @@
 export DOTFILES=$HOME/.dotfiles
 export PRIVATE_DOTFILES=$HOME/.private.dotfiles
 
-export PATH="$HOME/bin:$HOME/.dotfiles/bin:/usr/local/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin"
+export PATH="$HOME/bin:$HOME/.dotfiles/bin:/usr/local/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin"
 export MANPATH="/usr/local/man:$MANPATH"
 
 export PROJECTS=~/Development
