@@ -75,6 +75,11 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^[[3~' delete-char
 	bindkey '^[^N' newtab
 	bindkey '^?' backward-delete-char
+	bindkey '^H' backward-kill-word
+	bindkey '^[[3^' delete-word
+	bindkey '^[[7~' beginning-of-line
+	bindkey '^[[8~' end-of-line
+	bindkey -s '\el' 'ls\n' # [Esc-l] - run command: ls
 
 	autoload -z edit-command-line
 	zle -N edit-command-line
