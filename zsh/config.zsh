@@ -80,6 +80,7 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^[[7~' beginning-of-line
 	bindkey '^[[8~' end-of-line
 	bindkey -s '\el' 'ls\n' # [Esc-l] - run command: ls
+	bindkey -s '\eL' 'ls -la\n' # [Esc-l] - run command: ls -la
 
 	autoload -z edit-command-line
 	zle -N edit-command-line
