@@ -23,6 +23,8 @@ if [ -z "$SESSION_TYPE" ]; then
 			fi
 			;;
 		*)
+			EMACS_BIN=$(which emacs)
+			EMACSCLIENT_BIN=$(which emacsclient)
 			;;
 	esac
 fi
@@ -54,6 +56,7 @@ fi
 # Try and run emacs
 if [ -x $EMACS_BIN ]; then
 	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
+		echo "When done with a buffer, type C-x #"
 		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
 		exit $?
 	else
