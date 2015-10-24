@@ -7,7 +7,13 @@ if [[ -n "$PS1" ]]; then
     case "$(uname)" in
 		Linux | cygwin | CYGWIN*)
 			alias ls='ls --color=auto'
-		;;
+			;;
+	esac
+
+	case "$(uname)" in
+		Linux)
+			alias open='xdg-open'
+			;;
 	esac
 fi
 
