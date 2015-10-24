@@ -23,10 +23,7 @@ set -g status-utf8 on
 setw -g xterm-keys on
 
 # mouse settings
-setw -g mode-mouse on
-set -g mouse-select-pane on
-set -g mouse-resize-pane on
-set -g mouse-select-window on
+setw -g mouse on
 
 # keybindings
 bind -t emacs-copy    C-Left previous-word
