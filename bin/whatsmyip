@@ -8,7 +8,7 @@ print_external_ip()
 	    prefix="Internet : "
 	fi
 
-	echo "$prefix"$(dig +short myip.opendns.com @resolver1.opendns.com)
+	echo "$prefix"$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 }
 
 print_local_ip()
@@ -19,11 +19,16 @@ print_local_ip()
 	    prefix="Local    : "
 	fi
 
-	if [[ -z $(ipconfig getifaddr en1) ]]
-	then
-		echo "$prefix"$(ipconfig getifaddr en0)
+	which ip > /dev/null
+    if [[ "$?" == '0' ]]; then
+		echo "$prefix"$(ip -o addr show | grep -E enp[0-9]+s[0-9]+ | grep -Ev '[0-9]+: (lo|docker)' | grep -Eo 'inet [0-9]+.[0-9]+.[0-9]+.[0-9]+' | cut -d \  -f 2)
 	else
-		echo "$prefix"$(ipconfig getifaddr en1)
+		if [[ -z $(ipconfig getifaddr en1) ]]
+		then
+			echo "$prefix"$(ipconfig getifaddr en0)
+		else
+			echo "$prefix"$(ipconfig getifaddr en1)
+		fi
 	fi
 }
 
