@@ -9,9 +9,10 @@
 [mergetool]
 	keepBackup = true
 [alias]
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	lg = log --graph --pretty=format:'%Cred%h%Creset - [signed:%C(bold magenta)%G?%C(reset)]%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %C(green)%GK%C(reset)' --abbrev-commit --date=relative
 	s = status --short --branch
-    ll = log --pretty=format:'%Cred%h%C(yellow)%d%Creset - %s %Cgreen(%cr) %C(bold blue)<%an>' --decorate --numstat
+    ll = log --pretty=format:'%Cred%h%C(yellow)%d%Creset - [signed:%C(bold red)%G?%C(reset)] %s %Cgreen(%cr) %C(bold blue)<%an>%C(reset) %C(green)%GK%C(reset)' --decorate --numstat
+    lsig = log --show-signature
     filelog = log -u
     gr = grep -Ii
     wdiff = diff --word-diff
