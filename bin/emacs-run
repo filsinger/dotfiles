@@ -10,8 +10,8 @@ fi
 if [ -z "$SESSION_TYPE" ]; then
 	case "$OSTYPE" in
 		cygwin)
-			EMACS_BIN="/cygdrive/c/bin/emacs-24.5/bin/runemacs.exe"
-			EMACSCLIENT_BIN="/cygdrive/c/bin/emacs-24.5/bin/emacsclient.exe"
+			EMACS_BIN="/cygdrive/c/bin/emacs/bin/runemacs.exe"
+			EMACSCLIENT_BIN="/cygdrive/c/bin/emacs/bin/emacsclient.exe"
 			;;
 		darwin*)
 			if [[ -z "$TMUX_PANE" ]]; then # don't try and open the emacs.app version if within a tmux session
