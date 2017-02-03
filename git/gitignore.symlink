@@ -34,9 +34,13 @@
 # OS generated files #
 ######################
 .DS_Store*
+.AppleDouble
+.LSOverride
 ehthumbs.db
 #Icon?
 Thumbs.db
+Icon
+._*
 
 # VCS files #
 #############
@@ -58,3 +62,16 @@ GPATH
 GRTAGS
 GSYMS
 GTAGS
+
+# Files that might appear on external disk #
+############################################
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share #
+#######################################################
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
