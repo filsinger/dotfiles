@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 print_external_ip()
 {
@@ -8,7 +8,12 @@ print_external_ip()
 	    prefix="Internet : "
 	fi
 
-	echo "$prefix"$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+	which dig > /dev/null
+	if [[ "$?" == '0' ]]; then
+		echo "$prefix$(dig +short myip.opendns.com @resolver1.opendns.com)"
+	else
+		echo "$prefix"$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+	fi
 }
 
 print_local_ip()
@@ -21,7 +26,7 @@ print_local_ip()
 
 	which ip > /dev/null
     if [[ "$?" == '0' ]]; then
-		echo "$prefix"$(ip -o addr show | grep -E enp[0-9]+s[0-9]+ | grep -Ev '[0-9]+: (lo|docker)' | grep -Eo 'inet [0-9]+.[0-9]+.[0-9]+.[0-9]+' | cut -d \  -f 2)
+		echo "$prefix$(ip -o addr show | sed -n -r -e 's#^[0-9]+: (bond|enp[0-9]+s|eno[0-9])[0-9].+inet ([^/]+)/.+$#\2#p' | head)"
 	else
 		if [[ -z $(ipconfig getifaddr en1) ]]
 		then
@@ -48,3 +53,6 @@ else
 		print_local_ip
 	fi
 fi
+
+unset -f print_external_ip
+unset -f print_local_ip
