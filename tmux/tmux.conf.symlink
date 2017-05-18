@@ -22,10 +22,10 @@ setw -g xterm-keys on
 setw -g mouse on
 
 # keybindings
-bind -t emacs-copy    C-Left previous-word
-bind -t emacs-copy   C-Right next-word-end
-bind -t emacs-copy  C-S-Left previous-space
-bind -t emacs-copy C-S-Right next-space
+bind-key -T copy-mode C-Left send-keys -X previous-word
+bind-key -T copy-mode C-Right send-keys -X next-word-end
+bind-key -T copy-mode C-S-Left send-keys -X previous-space
+bind-key -T copy-mode C-S-Right send-keys -X next-space
 
 bind k send-keys C-c \; run-shell 'sleep .01s' \; send-keys C-l \; run-shell 'sleep .01s' \; clear-history
 bind '"' split-window -c "#{pane_current_path}"
