@@ -1,0 +1,15 @@
+#!/usr/bin/zsh
+
+screenshot_file=$(mktemp "/tmp/lockscreen.$LOGNAME.XXXXXXXXXXXXXXXX.png")
+sleep 1
+scrot "$screenshot_file"
+
+if [[ -r "$screenshot_file" ]]; then
+	convert "$screenshot_file" -scale 10% -scale 1000% "$screenshot_file"
+	[[ -f $1 ]] && convert "$screenshot_file" $1 -gravity center -composite -matte "$screenshot_file"
+	i3lock -u -i "$screenshot_file"
+
+	rm "$screenshot_file" > /dev/null	
+else
+	i3lock -u
+fi
