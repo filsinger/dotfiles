@@ -75,3 +75,12 @@ GTAGS
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# KDevelop project files:
+*.kdev4
+.kdev4
+
+.kdev4/
+GenerateTags.sh
+UE4CodeCompletionFolders.txt
+UE4CodeLitePreProcessor.txt
