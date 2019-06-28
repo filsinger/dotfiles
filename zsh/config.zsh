@@ -36,6 +36,7 @@ if [[ -n "$PS1" ]]; then
 	RPROMPT='${vcs_info_msg_0_}'
 
 	[[ -d /usr/local/share/zsh-completions ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+	[[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
 
 	# History Information
 	HISTFILE=~/.zsh_history
@@ -73,7 +74,6 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^[[5D' beginning-of-line
 	bindkey '^[[5C' end-of-line
 	bindkey '^[[3~' delete-char
-	bindkey '^[^N' newtab
 	bindkey '^?' backward-delete-char
 	bindkey '^H' backward-kill-word
 	bindkey '^[[3^' delete-word
@@ -81,6 +81,8 @@ if [[ -n "$PS1" ]]; then
 	bindkey '^[[8~' end-of-line
 	bindkey -s '\el' 'ls\n' # [Esc-l] - run command: ls
 	bindkey -s '\eL' 'ls -la\n' # [Esc-l] - run command: ls -la
+	bindkey "^[[A" history-beginning-search-backward
+	bindkey "^[[B" history-beginning-search-forward
 
 	autoload -z edit-command-line
 	zle -N edit-command-line
@@ -94,4 +96,6 @@ if [[ -n "$PS1" ]]; then
 		autoload run-help
 		HELPDIR=/usr/local/share/zsh/helpfiles
 	fi
+
+	[[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
