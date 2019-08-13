@@ -24,15 +24,20 @@ print_local_ip()
 	    prefix="Local    : "
 	fi
 
-	which ip > /dev/null
-    if [[ "$?" == '0' ]]; then
-		echo "$prefix$(ip -o addr show | sed -n -r -e 's#^[0-9]+: (bond|enp[0-9]+s|eno[0-9])[0-9].+inet ([^/]+)/.+$#\2#p' | head)"
+	which networkctl > /dev/null
+	if [[ "$? == '0" ]]; then
+		echo "$prefix$(networkctl status | sed -n -r -e 's#^ +Address: ([0-9\.]+).+$#\1#p')"
 	else
-		if [[ -z $(ipconfig getifaddr en1) ]]
-		then
-			echo "$prefix"$(ipconfig getifaddr en0)
+		which ip > /dev/null
+		if [[ "$?" == '0' ]]; then
+			echo "$prefix$(ip -o addr show | sed -n -r -e 's#^[0-9]+: (bond|enp[0-9]+s|eno[0-9])[0-9].+inet ([^/]+)/.+$#\2#p' | head)"
 		else
-			echo "$prefix"$(ipconfig getifaddr en1)
+			if [[ -z $(ipconfig getifaddr en1) ]]
+			then
+				echo "$prefix"$(ipconfig getifaddr en0)
+			else
+				echo "$prefix"$(ipconfig getifaddr en1)
+			fi
 		fi
 	fi
 }
