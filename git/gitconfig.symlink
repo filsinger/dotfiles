@@ -24,3 +24,5 @@
 	default = simple
 [diff "csv"]
 	wordRegex = [^,\n]+[,\n]|[,]
+[merge]
+	conflictstyle = diff3
