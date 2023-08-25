@@ -1,15 +1,3 @@
-#!/usr/bin/zsh
+#!/bin/sh
 
-screenshot_file=$(mktemp "/tmp/lockscreen.$LOGNAME.XXXXXXXXXXXXXXXX.png")
-sleep 1
-scrot "$screenshot_file"
-
-if [[ -r "$screenshot_file" ]]; then
-	convert "$screenshot_file" -scale 10% -scale 1000% "$screenshot_file"
-	[[ -f $1 ]] && convert "$screenshot_file" $1 -gravity center -composite -matte "$screenshot_file"
-	i3lock -u -i "$screenshot_file"
-
-	rm "$screenshot_file" > /dev/null	
-else
-	i3lock -u
-fi
+/usr/bin/scrot -z -d 1 -e '/usr/bin/convert $f -scale 10% -scale 1000% RGB:- | /usr/bin/i3lock -u --raw 2560x1440:rgb --image /dev/stdin' /tmp/lockscreen.png; rm /tmp/lockscreen.png
