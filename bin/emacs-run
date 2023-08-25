@@ -60,6 +60,8 @@ if [ -x $EMACS_BIN ]; then
 		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
 		exit $?
 	else
+		# set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+		export LSP_USE_PLISTS=true
 		$EMACS_BIN --no-splash "$@"
 		exit $?
 	fi

@@ -14,3 +14,5 @@ export MANPATH="/usr/local/man:$MANPATH"
 export PROJECTS=~/Development
 export EDITOR=~/.dotfiles/bin/emacs-run
 
+# for emacs lsp-mode: https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+export LSP_USE_PLISTS=true
