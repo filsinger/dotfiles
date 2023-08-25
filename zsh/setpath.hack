@@ -30,6 +30,10 @@ elif [ -d /usr/local/rvm/bin ]; then
 	source /usr/local/rvm/scripts/rvm
 fi
 
+if [ -d $HOME/.local/bin ]; then
+	export PATH=$PATH:$HOME/.local/bin
+fi
+
 # Set the RaspberryPi Pico SDK path
 if [ -d '/usr/share/pico-sdk' ]; then
 	export PICO_SDK_PATH=/usr/share/pico-sdk
