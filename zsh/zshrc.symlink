@@ -4,6 +4,9 @@ if [[ $(uname -r | grep -o ARCH) == 'ARCH' ]]; then
 	source $DOTFILES/zsh/setpath.hack
 fi
 
+if [[ $(uname) == 'Linux' ]]; then
+	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+fi
 
 # source every .zsh file in this rep
 for config_file ($DOTFILES/**/*.zsh) source $config_file
