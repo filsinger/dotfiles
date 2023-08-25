@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+# Open one or more man pages
+# if no man pages are specified, a selection window will
+# display listing all man pages (rofi or dmenu in an
+# xdg session or fzf in the terminal).
+# if in an xdg session the man page will be converted to a
+# pdf and opened, if in a terminal session man will be
+# used instead.
+
+function selection_menu() {
+	if [ ! -z $XDG_SESSION_TYPE ]; then
+		if [[ -e $(which rofi) ]]; then
+			cat < /dev/stdin | rofi -dmenu -i -l 30
+			return
+		elif [[ -e $(which rofi) ]]; then
+			cat < /dev/stdin | dmenu -i -l 30
+			return
+		fi
+    fi
+	if [[ -e $(which fzf) ]]; then
+		cat < /dev/stdin | fzf
+	fi
+}
+
+function view_manual() {
+	if [ ! -z $XDG_SESSION_TYPE ]; then
+		echo -n "$1" | xargs -r man -Tpdf | zathura -
+	else
+		man $1
+	fi
+}
+
+if [[ $# -le 1 ]]; then
+   man_to_view=$1
+   [[ -z $man_to_view ]] && man_to_view=$(man -k . | selection_menu | sed -n -r -e 's#^([^ \t]+) .+#\1#p')
+
+   if [[ -z $man_to_view ]]; then
+	   exit 1;
+   fi
+
+   view_manual $man_to_view
+else
+	for manual in $@; do
+		view_manual $manual &
+	done
+fi
+
