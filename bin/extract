@@ -4,6 +4,9 @@ local c e i
 
 (($#)) || exit
 
+local extract_command_list=()
+local extract_filename_list=()
+
 for i; do
     c=''
     e=1
@@ -14,7 +17,7 @@ for i; do
     fi
 
     case $i in
-        *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz))))) c=(bsdtar xvf);;
+        *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz))))) c=(bsdtar xvf) ;;
         *.7z)  c=(7z x);;
 		*.Z)   c=(uncompress);;
         *.bz2) c=(bunzip2);;
@@ -26,10 +29,23 @@ for i; do
         *)
 			echo "$0: unrecognized file extension: \`$i'" >&2
             continue;;
-    esac
+	esac
 
-    command "${c[@]}" "$i"
-    ((e = e || $?))
+    extract_command_list+=("${c}")
+    extract_filename_list+=("\"${i}\"")
 done
-																	  
+
+if (( ${#extract_command_list} > 0 )); then
+	if (( ${#extract_command_list} == ${#extract_filename_list} )); then
+		echo "Extracting ${#extract_filename_list} archices."
+		parallel --verbose --jobs 6 --link ::: ${extract_command_list} ::: ${extract_filename_list}
+		((e = e || $?))
+	else
+		echo "Extract command and filenames to not match."
+		e = 0
+	fi
+else
+	e = 0
+fi
+
 return "$e"
