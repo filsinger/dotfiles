@@ -31,3 +31,9 @@ if [[ -n "$PS1" ]]; then
 
 	autoload -U colors && colors
 fi
+
+if [ ! -z $(which pio) ]; then
+# Begin: PlatformIO Core completion support
+eval "$(_PIO_COMPLETE=zsh_source pio)"
+# End: PlatformIO Core completion support
+fi
