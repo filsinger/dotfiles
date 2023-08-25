@@ -3,7 +3,9 @@
 # cygwin specific configuration options
 
 # copy
-bind -n -t emacs-copy M-w copy-pipe "cat > /dev/clipboard"
+bind-key -T copy-mode M-w send-key -X copy-pipe-and-cancel "cat > /dev/clipboard"
+bind-key -T copy-mode C-w send-key -X copy-pipe-and-cancel "cat > /dev/clipboard"
 
 # paste
-bind ] run "cat /dev/clipboard | tmux load-buffer - ; tmux paste-buffer"
+bind-key ] run "cat /dev/xlipboard | tmux load-buffer -; tmux paste-buffer"
+bind-key -T root C-y run "cat /dev/clipboard | tmux load-buffer - ; tmux paste-buffer"
