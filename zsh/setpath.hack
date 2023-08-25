@@ -39,3 +39,9 @@ if [ -d '/usr/share/pico-sdk' ]; then
 	export PICO_SDK_PATH=/usr/share/pico-sdk
 fi
 
+
+# Set the LXVST path path
+if [ -d $HOME/.local/lib/lxvst ]; then
+	export LXVST_PATH=$LXVST_PATH:$HOME/.local/lib/lxvst
+fi
+
