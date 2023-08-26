@@ -19,4 +19,4 @@ if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
 fi
 
 # for emacs lsp-mode: https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
-export LSP_USE_PLISTS=true
+#export LSP_USE_PLISTS=true
