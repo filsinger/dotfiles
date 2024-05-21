@@ -6,7 +6,7 @@ export PRIVATE_DOTFILES=$HOME/.private.dotfiles
 
 if [[ $(uname -r | grep -o ARCH) != 'ARCH' ]]; then
 	source $DOTFILES/zsh/setpath.hack
-	export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share"
+	export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/share:/usr/share:/var/lib/flatpak/exports/share"
 fi
 
 export MANPATH="/usr/local/man:$MANPATH"
