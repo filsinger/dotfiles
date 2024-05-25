@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 # try and detect if we are running from a remote session
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
@@ -23,15 +23,29 @@ if [ -z "$SESSION_TYPE" ]; then
 			fi
 			;;
 		*)
-			EMACS_BIN=$(which emacs)
-			EMACSCLIENT_BIN=$(which emacsclient)
+			EMACS_BIN=$(which emacs 2> /dev/null)
+			EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
+
+            if [[ -z "$EMACS_BIN" ]]; then
+                TOOLBOX_BIN=$(which toolbox 2> /dev/null)
+                # cant find the emacs binary, check if toolbox is available
+                # and run emacs through a 'dev' toolbox.
+                if [[ -x "$TOOLBOX_BIN" ]]; then
+                    echo "Trying toolbox $TOOLBOX_BIN"
+                    EMACS_BIN="$TOOLBOX_BIN run -c dev emacs"
+                    EMACSCLIENT_BIN="$TOOLBOX_BIN run -c dev emacsclient"
+                    echo $EMACS_BIN
+                    echo $EMACSCLIENT_BIN
+                fi
+            fi
+               
 			;;
 	esac
 fi
 
 # If we haven't set an emacs binary based on platform, try and
 # run a default one (should the terminal version).
-if [ -z $EMACS_BIN ]; then
+if [[ -z $EMACS_BIN ]]; then
 	which emacs >> /dev/null
 	if [ $?  ]; then
 		EMACS_BIN=`(which emacs)`
@@ -54,7 +68,7 @@ if [[ "$@" == *--eval* ]]; then
 fi
 
 # Try and run emacs
-if [ -x $EMACS_BIN ]; then
+if [[ ! -z $EMACS_BIN ]]; then
 	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
 		echo "When done with a buffer, type C-x #"
 		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
