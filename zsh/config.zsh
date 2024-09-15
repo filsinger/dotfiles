@@ -104,6 +104,8 @@ if [[ -n "$PS1" ]]; then
 	bindkey "^X^E" edit-command-line
 
 	zstyle ':completion:*' menu select
+	zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+	zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 	# online help
 	if [ -d '/usr/local/share/zsh/helpfiles' ]; then
