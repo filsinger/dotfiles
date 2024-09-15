@@ -47,8 +47,8 @@ if [[ -n "$PS1" ]]; then
 
 	# History Information
 	HISTFILE=~/.zsh_history
-	HISTSIZE=1000
-	SAVEHIST=1000
+	HISTSIZE=5000
+	SAVEHIST=$HISTSIZE
 	REPORTTIME=10
 
 	setopt NO_BG_NICE # don't nice background tasks
