@@ -50,6 +50,9 @@ if [[ -n "$PS1" ]]; then
 	HISTSIZE=5000
 	SAVEHIST=$HISTSIZE
 	REPORTTIME=10
+	HISTDUP=erase
+	setopt appendhistory
+	setopt sharehistory
 
 	setopt NO_BG_NICE # don't nice background tasks
 	setopt NO_HUP
@@ -68,6 +71,9 @@ if [[ -n "$PS1" ]]; then
 	setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share it across sessions
 	setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
 	setopt HIST_REDUCE_BLANKS
+	setopt HIST_IGNORE_DUPS
+	setopt HIST_IGNORE_SPACE
+	setopt HIST_SAVE_NO_DUPS
 
 	# don't expand aliases _before_ completion has finished
 	#   like: git comm-[tab]
@@ -90,6 +96,8 @@ if [[ -n "$PS1" ]]; then
 	bindkey -s '\eL' 'ls -la\n' # [Esc-l] - run command: ls -la
 	bindkey "^[[A" history-beginning-search-backward
 	bindkey "^[[B" history-beginning-search-forward
+	bindkey '^p' history-search-backward
+	bindkey '^n' history-search-forward
 
 	autoload -z edit-command-line
 	zle -N edit-command-line
