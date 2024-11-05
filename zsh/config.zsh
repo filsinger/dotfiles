@@ -11,18 +11,19 @@ export CLICOLOR=true
 
 # only do the following if running interactively
 if [[ -n "$PS1" ]]; then
+
 	if [[ -n $SSH_CONNECTION ]]; then
 		PROMPT='🖧%{$fg[magenta]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[magenta]%}❯%{$reset_color%} '
 	else
 		if [[ -n $TMUX ]]; then
 			PROMPT='%{$fg[blue]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-        elif [[ -n $container ]]; then
-            if [[ -f /run/.containerenv ]]; then
-                JF_CONTAINER_NAME=$(sed -n -r -e 's/^name="(.+)"/\1/p' /run/.containerenv)
-                PROMPT='📦%{$fg[cyan]%}%m[$JF_CONTAINER_NAME]%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-            else
-                PROMPT='📦%{$fg[cyan]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-            fi
+		elif [[ -n $container ]]; then
+			if [[ -f /run/.containerenv ]]; then
+				JF_CONTAINER_NAME=$(sed -n -r -e 's/^name="(.+)"/\1/p' /run/.containerenv)
+				PROMPT='📦%{$fg[cyan]%}%n@%m[$JF_CONTAINER_NAME]%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
+			else
+				PROMPT='📦%{$fg[cyan]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
+			fi
 		else
 			PROMPT='%{$fg[green]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[green]%}❯%{$reset_color%} '
 		fi
