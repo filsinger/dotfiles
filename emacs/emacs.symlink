@@ -3,6 +3,11 @@
 ;; This file assumes 'https://github.com/filsinger/emacs-config' is cloned
 ;; into '~/.emacs.git/'.
 
+;; Set the default window background to the Catppuccin Frappé color scheme.
+;; https://catppuccin.com/palette
+(set-foreground-color "#c6d0f5")
+(set-background-color "#303446")
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
