@@ -4,6 +4,15 @@
 unbind r
 bind r source-file ~/.tmux.conf
 
+# Configure the catppuccin plugin
+set -g @catppuccin_flavor "frappe"
+set -g @catppuccin_window_status_style "rounded"
+
+# Enable catppuccin theme if it exidsts
+if-shell '[[ -f ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux ]]' 'run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux'
+# Fall back to my old color settings if catppuccin isn't found
+if-shell '[[ ! -f ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux ]]' 'run ~/.config/dotfile/tmux/my-old-theme.conf'
+
 set -g base-index 1      # Start window numbering at 1
 set -g pane-base-index 1 # Start pane numbering at 1
 
@@ -50,31 +59,4 @@ set-option -g status-justify "centre"
 set-option -g status-left-length 60
 set-option -g status-right-length 90
 
-#
-# COLOURS
-#
 
-# default statusbar colors
-set -g status-style fg=colour250,bg=colour234,dim
-#set-option -g status-attr default
-
-# default left statusbar colors
-set -g status-left-style fg=colour250,bg=default,default
-
-# default right statusbar colors
-set -g status-right-style fg=colour240,bg=default,default
-
-# default window title colors
-set -g window-status-style fg=colour240,bg=default
-
-# active window title colors
-set -g window-status-current-style fg=colour252,bg=colour32,reverse
-
-# pane border
-set -g pane-border-style fg=colour235
-set -g pane-active-border-style fg=colour32
-
-# message text
-set -g message-style fg=colour232,bg=colour32
-
-set -g mode-style fg=colour232,bg=colour32
