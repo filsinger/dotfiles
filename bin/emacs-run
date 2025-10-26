@@ -16,7 +16,7 @@ if [ -z "$SESSION_TYPE" ]; then
                 emacs_bin_folder="$base_emacs_folder/$candidate/bin"
                 if [[ -d "$emacs_bin_folder" ]]; then
                     [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
-                    [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_CLIENT="$emacs_bin_folder/emacsclientw.exe"
+                    [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
                 fi
             done
 
@@ -45,7 +45,7 @@ if [ -z "$SESSION_TYPE" ]; then
                     emacs_bin_folder="$base_emacs_folder/$candidate/bin"
                     if [[ -d "$emacs_bin_folder" ]]; then
                         [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
-                        [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_CLIENT="$emacs_bin_folder/emacsclientw.exe"
+                        [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
                     fi
                 done
 
@@ -104,12 +104,12 @@ fi
 if [[ ! -z $EMACS_BIN ]]; then
 	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
 		echo "When done with a buffer, type C-x #"
-		$EMACSCLIENT_BIN --alternate-editor="$EMACS_BIN" "$@"
+		"$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
 		exit $?
 	else
 		# set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 		#export LSP_USE_PLISTS=true
-		$EMACS_BIN --no-splash "$@"
+		"$EMACS_BIN" --no-splash "$@"
 		exit $?
 	fi
 fi
