@@ -104,6 +104,15 @@ fi
 if [[ ! -z $EMACS_BIN ]]; then
 	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
 		echo "When done with a buffer, type C-x #"
+
+        if [[ "$SESSION_TYPE" != "remote/ssh" ]]; then
+             # The path of EMACS_BIN needs to be translated
+             # if we are running in cygwin or wsl. Don't
+             # translate if we are running in an SSH session
+             [[ -x /usr/bin/cygpath ]] && EMACS_BIN=$(cygpath -m "$EMACS_BIN")
+             [[ -x /usr/bin/wslpath ]]   && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
+        fi
+
 		"$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
 		exit $?
 	else
