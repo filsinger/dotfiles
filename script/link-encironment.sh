@@ -7,7 +7,7 @@ source_path=$(realpath "$SCRIPT_DIR/../environment.d")
 
 if [ -d $target_path ]; then
     echo "$target_path already exists, skipping"
-elif [ -e $source_path ]; then
+elif [ ! -e $source_path ]; then
     echo "$source_path doesn't exist, skipping"
 else
     ln -s "$source_path" "$target_path"
