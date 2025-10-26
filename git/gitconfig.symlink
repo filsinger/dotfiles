@@ -1,16 +1,16 @@
 [color]
-	ui = true
+    ui = true
 [git-p4]
-	detectRename = true
+    detectRename = true
 [core]
-	editor = emacs-run
-	excludesfile = ~/.gitignore
-	autocrlf = input
+    editor = emacs-run
+    excludesfile = ~/.gitignore
+    autocrlf = input
 [mergetool]
-	keepBackup = true
+    keepBackup = true
 [alias]
-	lg = log --graph --pretty=format:'%Cred%h%Creset - [signed:%C(bold magenta)%G?%C(reset)]%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %C(green)%GK%C(reset)' --abbrev-commit --date=relative
-	s = status --short --branch
+    lg = log --graph --pretty=format:'%Cred%h%Creset - [signed:%C(bold magenta)%G?%C(reset)]%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %C(green)%GK%C(reset)' --abbrev-commit --date=relative
+    s = status --short --branch
     ll = log --pretty=format:'%Cred%h%C(yellow)%d%Creset - [signed:%C(bold red)%G?%C(reset)] %s %Cgreen(%cr) %C(bold blue)<%an>%C(reset) %C(green)%GK%C(reset)' --decorate --numstat
     lsig = log --show-signature
     filelog = log -u
@@ -19,10 +19,10 @@
     who = shortlog -n -s --no-merges
     ldf = "!git diff --diff-filter=MARC --name-only \"$(git merge-base HEAD ${1:-master})\""
 [include]
-	path = .gitconfig.private
+    path = .gitconfig.private
 [push]
-	default = simple
+    default = simple
 [diff "csv"]
-	wordRegex = [^,\n]+[,\n]|[,]
+    wordRegex = [^,\n]+[,\n]|[,]
 [merge]
-	conflictstyle = diff3
+    conflictstyle = diff3

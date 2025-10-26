@@ -11,7 +11,7 @@ if [[ `uname` == 'Darwin' ]]; then
 
     # brew bash completion
     if [ -f `brew --prefix`/etc/bash_completion.d/git-completion.bash  ]; then
-	. `brew --prefix`/etc/bash_completion.d/git-completion.bash
+        . `brew --prefix`/etc/bash_completion.d/git-completion.bash
     fi
 fi
 

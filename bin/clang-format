@@ -1,15 +1,15 @@
 #!/usr/bin/env zsh
 
 if [[ -x "/usr/local/opt/llvm/bin/clang-format" ]]; then
-	/usr/local/opt/llvm/bin/clang-format $@	
+    /usr/local/opt/llvm/bin/clang-format $@
 elif [[ -x "/usr/bin/clang-format" ]]; then
-	/usr/bin/clang-format $@	
+    /usr/bin/clang-format $@
 elif [[ -x "/usr/local/bin/clang-format" ]]; then
-	/usr/local/bin/clang-format $@	
+    /usr/local/bin/clang-format $@
 elif [[ -x "/usr/bin/clang-format-3.5" ]]; then
-	/usr/bin/clang-format-3.5 $@	
+    /usr/bin/clang-format-3.5 $@
 else
-	exit 1
+    exit 1
 fi
 
 exit $?

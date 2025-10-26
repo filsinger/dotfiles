@@ -2,61 +2,61 @@
 
 print_external_ip()
 {
-	prefix=""
-	if [[ $# == 1 ]]
-	then
-	    prefix="Internet : "
-	fi
+    prefix=""
+    if [[ $# == 1 ]]
+    then
+        prefix="Internet : "
+    fi
 
-	which dig > /dev/null
-	if [[ "$?" == '0' ]]; then
-		echo "$prefix$(dig +short myip.opendns.com @resolver1.opendns.com)"
-	else
-		echo "$prefix"$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
-	fi
+    which dig > /dev/null
+    if [[ "$?" == '0' ]]; then
+        echo "$prefix$(dig +short myip.opendns.com @resolver1.opendns.com)"
+    else
+        echo "$prefix"$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+    fi
 }
 
 print_local_ip()
 {
-	prefix=""
-	if [[ $# == 1 ]]
-	then
-	    prefix="Local    : "
-	fi
+    prefix=""
+    if [[ $# == 1 ]]
+    then
+        prefix="Local    : "
+    fi
 
-	which networkctl > /dev/null
-	if [[ "$? == '0" ]]; then
-		echo "$prefix$(networkctl status | sed -n -r -e 's#^ +Address: ([0-9\.]+).+$#\1#p')"
-	else
-		which ip > /dev/null
-		if [[ "$?" == '0' ]]; then
-			echo "$prefix$(ip -o addr show | sed -n -r -e 's#^[0-9]+: (bond|enp[0-9]+s|eno[0-9])[0-9].+inet ([^/]+)/.+$#\2#p' | head)"
-		else
-			if [[ -z $(ipconfig getifaddr en1) ]]
-			then
-				echo "$prefix"$(ipconfig getifaddr en0)
-			else
-				echo "$prefix"$(ipconfig getifaddr en1)
-			fi
-		fi
-	fi
+    which networkctl > /dev/null
+    if [[ "$? == '0" ]]; then
+        echo "$prefix$(networkctl status | sed -n -r -e 's#^ +Address: ([0-9\.]+).+$#\1#p')"
+    else
+        which ip > /dev/null
+        if [[ "$?" == '0' ]]; then
+            echo "$prefix$(ip -o addr show | sed -n -r -e 's#^[0-9]+: (bond|enp[0-9]+s|eno[0-9])[0-9].+inet ([^/]+)/.+$#\2#p' | head)"
+        else
+            if [[ -z $(ipconfig getifaddr en1) ]]
+            then
+                echo "$prefix"$(ipconfig getifaddr en0)
+            else
+                echo "$prefix"$(ipconfig getifaddr en1)
+            fi
+        fi
+    fi
 }
 
 if [[ $# == 0 ]]
 then
-	print_external_ip -v
-	print_local_ip -v
+    print_external_ip -v
+    print_local_ip -v
 else
 
-	if [[ $1 == '-e' ]]
-	then
-		print_external_ip
-	fi
+    if [[ $1 == '-e' ]]
+    then
+        print_external_ip
+    fi
 
-	if [[ $1 == '-l' ]]
-	then
-		print_local_ip
-	fi
+    if [[ $1 == '-l' ]]
+    then
+        print_local_ip
+    fi
 fi
 
 unset -f print_external_ip

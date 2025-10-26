@@ -20,7 +20,7 @@ for i; do
         *.tar.gz) c=(tar -xvf);;
         *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz))))) c=(bsdtar xvf) ;;
         *.7z)  c=(7z x);;
-		*.Z)   c=(uncompress);;
+        *.Z)   c=(uncompress);;
         *.bz2) c=(bunzip2);;
         *.exe) c=(cabextract);;
         *.gz)  c=(gunzip);;
@@ -28,25 +28,25 @@ for i; do
         *.xz)  c=(unxz);;
         *.zip) c=(unzip);;
         *)
-			echo "$0: unrecognized file extension: \`$i'" >&2
+            echo "$0: unrecognized file extension: \`$i'" >&2
             continue;;
-	esac
+    esac
 
     extract_command_list+=("${c}")
     extract_filename_list+=("\"${i}\"")
 done
 
 if (( ${#extract_command_list} > 0 )); then
-	if (( ${#extract_command_list} == ${#extract_filename_list} )); then
-		echo "Extracting ${#extract_filename_list} archices."
-		parallel --verbose --jobs 6 --link ::: ${extract_command_list} ::: ${extract_filename_list}
-		((e = e || $?))
-	else
-		echo "Extract command and filenames to not match."
-		e = 0
-	fi
+    if (( ${#extract_command_list} == ${#extract_filename_list} )); then
+        echo "Extracting ${#extract_filename_list} archices."
+        parallel --verbose --jobs 6 --link ::: ${extract_command_list} ::: ${extract_filename_list}
+        ((e = e || $?))
+    else
+        echo "Extract command and filenames to not match."
+        e = 0
+    fi
 else
-	e = 0
+    e = 0
 fi
 
 return "$e"

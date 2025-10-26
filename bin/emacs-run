@@ -8,8 +8,8 @@ fi
 # If we aren't connected via remote connection
 # lets try and run a graphical version of emacs.
 if [ -z "$SESSION_TYPE" ]; then
-	case "$OSTYPE" in
-		cygwin)
+    case "$OSTYPE" in
+        cygwin)
             # Check program files first
             base_emacs_folder=$(cygpath -u 'c:/Program Files/Emacs')
             for candidate in $(ls "$base_emacs_folder"); do
@@ -23,21 +23,24 @@ if [ -z "$SESSION_TYPE" ]; then
             # If we don't have a useable version, check c:/bin/emacs
             emacs_bin_folder=$(cygpath -u 'c:/bin/emacs/bin')
             [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
-			[[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
+            [[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
 
-			;;
+            ;;
 
-		darwin*)
-			if [[ -z "$TMUX_PANE" ]]; then # don't try and open the emacs.app version if within a tmux session
-				EMACS_APP="/Applications/Emacs.app/"
-				if [ -d "$EMACS_APP" ]; then
-					EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
-					EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
-				fi
-			fi
-			;;
+        darwin*)
+            if [[ -z "$TMUX_PANE" ]]; then # don't try and open the emacs.app version if within a tmux session
+                EMACS_APP="/Applications/Emacs.app/"
+                if [ -d "$EMACS_APP" ]; then
+                    EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs"
+                    EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/bin/emacsclient"
 
-		*)
+                    [[ ! -x $EMACS_BIN ]] && EMACS_BIN="$EMACS_APP/Contents/MacOS/Emacs-arm64-11"
+                    [[ ! -x $EMACSCLIENT_BIN ]] && EMACSCLIENT_BIN="$EMACS_APP/Contents/MacOS/emacs-arm64-11/emacsclient"
+                fi
+            fi
+            ;;
+
+        *)
             if [[ -x /usr/bin/wslpath ]]; then
                 # Running in WSL and not in an SSH session
                 base_emacs_folder=$(wslpath -u 'c:/Program Files/Emacs')
@@ -52,12 +55,12 @@ if [ -z "$SESSION_TYPE" ]; then
                 # If we don't have a useable version yet, check c:/bin/emacs
                 emacs_bin_folder=$(wslpath -u 'c:/bin/emacs/bin')
                 [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
-			    [[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
+                [[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
 
             fi
 
             [[ ! -x $EMACS_BIN ]] && EMACS_BIN=$(which emacs 2> /dev/null)
-			[[ ! -x $EMACSCLIENT_BIN ]] && EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
+            [[ ! -x $EMACSCLIENT_BIN ]] && EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
 
             if [[ ! -x "$EMACS_BIN" ]]; then
                 TOOLBOX_BIN=$(which toolbox 2> /dev/null)
@@ -71,64 +74,64 @@ if [ -z "$SESSION_TYPE" ]; then
                 fi
             fi
 
-			;;
-	esac
+            ;;
+    esac
 fi
 
 # If we haven't set an emacs binary based on platform, try and
 # run a default one (should the terminal version).
 if [[ -z $EMACS_BIN ]]; then
-	which emacs >> /dev/null
-	if [ $?  ]; then
-		EMACS_BIN=`(which emacs)`
-	fi
+    which emacs >> /dev/null
+    if [ $?  ]; then
+        EMACS_BIN=`(which emacs)`
+    fi
 
-	which emacsclient >> /dev/null
-	if [ -z "$EMACSCLIENT_BIN" ] && [ $? ]; then
-		EMACSCLIENT_BIN=`(which emacsclient)`
-	fi
+    which emacsclient >> /dev/null
+    if [ -z "$EMACSCLIENT_BIN" ] && [ $? ]; then
+        EMACSCLIENT_BIN=`(which emacsclient)`
+    fi
 fi
 
 # Don't run emacs client if we havent passed any params
 if [[ -z "$@" ]]; then
-	EMACSCLIENT_BIN=
+    EMACSCLIENT_BIN=
 fi
 
 # Don't run emacs client if trying to evaluate an expression'
 if [[ "$@" == *--eval* ]]; then
-	EMACSCLIENT_BIN=
+    EMACSCLIENT_BIN=
 fi
 
 # Try and run emacs
 if [[ ! -z $EMACS_BIN ]]; then
-	if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
-		echo "When done with a buffer, type C-x #"
+    if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
+        echo "When done with a buffer, type C-x #"
 
         if [[ "$SESSION_TYPE" != "remote/ssh" ]]; then
-             # The path of EMACS_BIN needs to be translated
-             # if we are running in cygwin or wsl. Don't
-             # translate if we are running in an SSH session
-             [[ -x /usr/bin/cygpath ]] && EMACS_BIN=$(cygpath -m "$EMACS_BIN")
-             [[ -x /usr/bin/wslpath ]] && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
+            # The path of EMACS_BIN needs to be translated
+            # if we are running in cygwin or wsl. Don't
+            # translate if we are running in an SSH session
+            [[ -x /usr/bin/cygpath ]] && EMACS_BIN=$(cygpath -m "$EMACS_BIN")
+            [[ -x /usr/bin/wslpath ]] && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
         fi
 
         if [[ -v CONTAINER_COMMAND ]] && [[ -x "$CONTAINER_COMMAND" ]]; then
             $CONTAINER_COMMAND "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
         else
-		    "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+            "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
         fi
 
-		exit $?
-	else
-		# set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
-		#export LSP_USE_PLISTS=true
+        exit $?
+    else
+        # set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+        #export LSP_USE_PLISTS=true
         if [[ -v CONTAINER_COMMAND ]]; then
             $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "$@"
         else
-		    "$EMACS_BIN" --no-splash "$@"
+            "$EMACS_BIN" --no-splash "$@"
         fi
-		exit $?
-	fi
+        exit $?
+    fi
 fi
 
 # return an error if we reach this point
