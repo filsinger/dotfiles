@@ -15,6 +15,12 @@ if [[ `uname` == 'Darwin' ]]; then
     fi
 fi
 
+if [[ $USER == "root" ]]; then
+    export PS1="\e[0;31m \u@\H\e[0m \w # "
+else
+    export PS1="\e[0;32m\H\e[0m \W # "
+fi
+
 if [ -f ~/.localrc.bash ]; then
     . ~/.localrc.bash
 fi
