@@ -11,8 +11,8 @@ if [ -z "$SESSION_TYPE" ]; then
 	case "$OSTYPE" in
 		cygwin)
             # Check program files first
-            base_emacs_folder="/cygdrive/c/Program\ Files/Emacs"
-            for candiate in $(ls "$base_emacs_folder"); do
+            base_emacs_folder=$(cygpath -u 'c:/Program Files/Emacs')
+            for candidate in $(ls "$base_emacs_folder"); do
                 emacs_bin_folder="$base_emacs_folder/$candidate/bin"
                 if [[ -d "$emacs_bin_folder" ]]; then
                     [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
@@ -21,7 +21,7 @@ if [ -z "$SESSION_TYPE" ]; then
             done
 
             # If we don't have a useable version, check c:/bin/emacs
-            emacs_bin_folder="/cygdrive/c/bin/emacs/bin/"
+            emacs_bin_folder=$(cygpath -u 'c:/bin/emacs/bin')
             [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
 			[[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
 
@@ -38,10 +38,10 @@ if [ -z "$SESSION_TYPE" ]; then
 			;;
 
 		*)
-            if [[ -x /usr/bin/wslinfo ]]; then
+            if [[ -x /usr/bin/wslpath ]]; then
                 # Running in WSL and not in an SSH session
-                base_emacs_folder="/mnt/c/Program\ Files/Emacs"
-                for candiate in $(ls "$base_emacs_folder"); do
+                base_emacs_folder=$(wslpath -u 'c:/Program Files/Emacs')
+                for candidate in $(ls "$base_emacs_folder"); do
                     emacs_bin_folder="$base_emacs_folder/$candidate/bin"
                     if [[ -d "$emacs_bin_folder" ]]; then
                         [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
@@ -50,7 +50,7 @@ if [ -z "$SESSION_TYPE" ]; then
                 done
 
                 # If we don't have a useable version yet, check c:/bin/emacs
-                emacs_bin_folder="/mnt/c/bin/emacs/bin/"
+                emacs_bin_folder=$(wslpath -u 'c:/bin/emacs/bin')
                 [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
 			    [[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
 
