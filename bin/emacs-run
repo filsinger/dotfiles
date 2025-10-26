@@ -10,9 +10,23 @@ fi
 if [ -z "$SESSION_TYPE" ]; then
 	case "$OSTYPE" in
 		cygwin)
-			EMACS_BIN="/cygdrive/c/bin/emacs/bin/runemacs.exe"
-			EMACSCLIENT_BIN="/cygdrive/c/bin/emacs/bin/emacsclientw.exe"
+            # Check program files first
+            base_emacs_folder="/cygdrive/c/Program\ Files/Emacs"
+            for candiate in $(ls "$base_emacs_folder"); do
+                emacs_bin_folder="$base_emacs_folder/$candidate/bin"
+                if [[ -d "$emacs_bin_folder" ]]; then
+                    [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
+                    [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_CLIENT="$emacs_bin_folder/emacsclientw.exe"
+                fi
+            done
+
+            # If we don't have a useable version, check c:/bin/emacs
+            emacs_bin_folder="/cygdrive/c/bin/emacs/bin/"
+            [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
+			[[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
+
 			;;
+
 		darwin*)
 			if [[ -z "$TMUX_PANE" ]]; then # don't try and open the emacs.app version if within a tmux session
 				EMACS_APP="/Applications/Emacs.app/"
@@ -22,11 +36,30 @@ if [ -z "$SESSION_TYPE" ]; then
 				fi
 			fi
 			;;
-		*)
-			EMACS_BIN=$(which emacs 2> /dev/null)
-			EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
 
-            if [[ -z "$EMACS_BIN" ]]; then
+		*)
+            if [[ -x /usr/bin/wslinfo ]]; then
+                # Running in WSL and not in an SSH session
+                base_emacs_folder="/mnt/c/Program\ Files/Emacs"
+                for candiate in $(ls "$base_emacs_folder"); do
+                    emacs_bin_folder="$base_emacs_folder/$candidate/bin"
+                    if [[ -d "$emacs_bin_folder" ]]; then
+                        [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
+                        [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_CLIENT="$emacs_bin_folder/emacsclientw.exe"
+                    fi
+                done
+
+                # If we don't have a useable version yet, check c:/bin/emacs
+                emacs_bin_folder="/mnt/c/bin/emacs/bin/"
+                [[ -x "$emacs_bin_folder/runemacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/runemacs.exe"
+			    [[ -x "$emacs_bin_folder/emacsclientw.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
+
+            fi
+
+            [[ ! -x $EMACS_BIN ]] && EMACS_BIN=$(which emacs 2> /dev/null)
+			[[ ! -x $EMACSCLIENT_BIN ]] && EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
+
+            if [[ ! -x "$EMACS_BIN" ]]; then
                 TOOLBOX_BIN=$(which toolbox 2> /dev/null)
                 # cant find the emacs binary, check if toolbox is available
                 # and run emacs through a 'dev' toolbox.
@@ -38,7 +71,7 @@ if [ -z "$SESSION_TYPE" ]; then
                     echo $EMACSCLIENT_BIN
                 fi
             fi
-               
+
 			;;
 	esac
 fi
