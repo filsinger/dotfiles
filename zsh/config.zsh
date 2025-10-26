@@ -18,6 +18,8 @@ if [[ -n "$PS1" ]]; then
         local primary_colour='%b%F{green}'
         local icon="%B";
         local arrows="%B";
+        local user=""
+
         if [[ -n $TMUX ]]; then
             primary_colour='%b%F{blue}'
         fi
@@ -25,28 +27,29 @@ if [[ -n "$PS1" ]]; then
             primary_colour='%B%F{magenta}'
             arrows+="%B%F{magenta}❯"
             icon+="%B%F{magenta}󰱠 "
+            user="%n@"
         fi
         if [[ -n $container ]]; then
             primary_colour='%B%F{cyan}'
             arrows+="%B%F{yellow}❯"
             icon+="%B%F{yellow} "
-
         fi
         if [[ $USER == "root" ]]; then
             primary_colour='%B%F{red}'
-            arrows+="%B%F{red}❯"
+            arrows+="%B%F{red}❯"
             icon+="%B%F{red} "
+            user="%n@"
         fi
 
         arrows+="$primary_colour❯"
 
-        local machine_name="$primary_colour%m"
+        local machine_name="$primary_colour$user%m"
 
         if [[ -n $container ]]; then
             if [[ -z "$JF_CONTAINER_NAME" ]]; then
-                machine_name="$primary_colour%m%F{$primary_colour}%b%f"
+                machine_name="$primary_colour$user%m%F{$primary_colour}%b%f"
             else
-                machine_name="$primary_colour%m[%B%F{blue}$JF_CONTAINER_NAME$primary_colour]%b%f"
+                machine_name="$primary_colour$user%m[%B%F{blue}$JF_CONTAINER_NAME$primary_colour]%b%f"
             fi
         fi
 
