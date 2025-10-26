@@ -9,7 +9,9 @@ if [[ $(uname) == 'Darwin' ]]; then
 
 	for formula in "${brew_formulas[@]}"
 	do
-		formula_bin_path="$(/usr/local/bin/brew --prefix $formula)"
+        [[ -x '/usr/local/bin/brew' ]] && formula_bin_path="$(/usr/local/bin/brew --prefix $formula)"
+		[[ -x '/opt/homebrew/bin/brew' ]] && formula_bin_path="$(/opt/homebrew/bin/brew --prefix $formula)"
+
 		if [[ $? == 0 ]] then
 		   export PATH="$formula_bin_path/bin:$PATH"
 		fi
