@@ -41,6 +41,32 @@ if [[ -n "$PS1" ]]; then
             user="%n@"
         fi
 
+        case "$OSTYPE" in
+            darwin*)
+                icon+="%B%F{black} %f"
+                ;;
+            linux*)
+                if [[ -x /usr/bin/wslinfo ]]; then
+                    icon+="%B%F{black} %f"
+                elif [[ -e /etc/os-release ]] && [[ -e /run/.containerenv ]]; then
+                    case "$(sed -n -r -e 's/^ID=(.+)/\1/p' /etc/os-release)" in
+                        arch)
+                            icon+="%B%F{black} %f"
+                            ;;
+                        fedora)
+                            icon+="%B%F{black} %f"
+                            ;;
+                        ubuntu)
+                            icon+="%B%F{black} %f"
+                            ;;
+                        *)
+                            icon+="%B%F{black} %f"
+                            ;;
+                    esac
+                fi
+                ;;
+        esac
+
         arrows+="$primary_colour❯"
 
         local machine_name="$primary_colour$user%m"
