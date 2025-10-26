@@ -12,22 +12,47 @@ export CLICOLOR=true
 # only do the following if running interactively
 if [[ -n "$PS1" ]]; then
 
-	if [[ -n $SSH_CONNECTION ]]; then
-		PROMPT='🖧%{$fg[magenta]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[magenta]%}❯%{$reset_color%} '
-	else
-		if [[ -n $TMUX ]]; then
-			PROMPT='%{$fg[blue]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-		elif [[ -n $container ]]; then
-			if [[ -f /run/.containerenv ]]; then
-				JF_CONTAINER_NAME=$(sed -n -r -e 's/^name="(.+)"/\1/p' /run/.containerenv)
-				PROMPT='📦%{$fg[cyan]%}%n@%m[$JF_CONTAINER_NAME]%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-			else
-				PROMPT='📦%{$fg[cyan]%}%n@%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[blue]%}❯%{$reset_color%} '
-			fi
-		else
-			PROMPT='%{$fg[green]%}%m%{$fg[black]%}:%{$reset_color%}%1~ %{$fg[green]%}❯%{$reset_color%} '
-		fi
-	fi
+    [[ -f /run/.containerenv ]] && JF_CONTAINER_NAME="$(sed -n -r -e 's/^name="(.+)"/\1/p' /run/.containerenv)"
+
+    () {
+        local primary_colour='%b%F{green}'
+        local icon="%B";
+        local arrows="%B";
+        if [[ -n $TMUX ]]; then
+            primary_colour='%b%F{blue}'
+        fi
+        if [[ -n $SSH_CONNECTION ]]; then
+            primary_colour='%B%F{magenta}'
+            arrows+="%B%F{magenta}❯"
+            icon+="%B%F{magenta}󰱠 "
+        fi
+        if [[ -n $container ]]; then
+            primary_colour='%B%F{cyan}'
+            arrows+="%B%F{yellow}❯"
+            icon+="%B%F{yellow} "
+
+        fi
+        if [[ $USER == "root" ]]; then
+            primary_colour='%B%F{red}'
+            arrows+="%B%F{red}❯"
+            icon+="%B%F{red} "
+        fi
+
+        arrows+="$primary_colour❯"
+
+        local machine_name="$primary_colour%m"
+
+        if [[ -n $container ]]; then
+            if [[ -z "$JF_CONTAINER_NAME" ]]; then
+                machine_name="$primary_colour%m%F{$primary_colour}%b%f"
+            else
+                machine_name="$primary_colour%m[%B%F{blue}$JF_CONTAINER_NAME$primary_colour]%b%f"
+            fi
+        fi
+
+        local directory='%b%F{white}%1~'
+        PS1=$''"${icon}${machine_name} ${directory} ${arrows}%b%f "
+    }
 
 	autoload -Uz vcs_info
 	zstyle ':vcs_info:*' enable git hg
