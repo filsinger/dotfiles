@@ -64,11 +64,10 @@ if [ -z "$SESSION_TYPE" ]; then
                 # cant find the emacs binary, check if toolbox is available
                 # and run emacs through a 'dev' toolbox.
                 if [[ -x "$TOOLBOX_BIN" ]]; then
-                    echo "Trying toolbox $TOOLBOX_BIN"
-                    EMACS_BIN="$TOOLBOX_BIN run -c dev emacs"
-                    EMACSCLIENT_BIN="$TOOLBOX_BIN run -c dev emacsclient"
-                    echo $EMACS_BIN
-                    echo $EMACSCLIENT_BIN
+                    TOOLBOX_CONTAINER="dev"
+                    CONTAINER_COMMAND="$TOOLBOX_BIN run -c $TOOLBOX_CONTAINER"
+                    EMACS_BIN="emacs"
+                    EMACSCLIENT_BIN="emacsclient"
                 fi
             fi
 
@@ -110,15 +109,24 @@ if [[ ! -z $EMACS_BIN ]]; then
              # if we are running in cygwin or wsl. Don't
              # translate if we are running in an SSH session
              [[ -x /usr/bin/cygpath ]] && EMACS_BIN=$(cygpath -m "$EMACS_BIN")
-             [[ -x /usr/bin/wslpath ]]   && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
+             [[ -x /usr/bin/wslpath ]] && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
         fi
 
-		"$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+        if [[ -v CONTAINER_COMMAND ]] && [[ -x "$CONTAINER_COMMAND" ]]; then
+            $CONTAINER_COMMAND "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+        else
+		    "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+        fi
+
 		exit $?
 	else
 		# set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 		#export LSP_USE_PLISTS=true
-		"$EMACS_BIN" --no-splash "$@"
+        if [[ -v CONTAINER_COMMAND ]]; then
+            $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "$@"
+        else
+		    "$EMACS_BIN" --no-splash "$@"
+        fi
 		exit $?
 	fi
 fi
