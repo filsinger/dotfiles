@@ -1,6 +1,6 @@
 # # -*- mode: shell-script; -*-
 
-export PATH="$HOME/bin:$HOME/.dotfiles/bin:/usr/local/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin"
+export PATH="$HOME/bin:$HOME/.dotfiles/bin:$HOME/.local/bin:/usr/local/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin"
 
 # Hack for OS X and homebrew paths for node and ruby
 if [[ $(uname) == 'Darwin' ]]; then
@@ -46,4 +46,3 @@ fi
 if [ -d $HOME/.local/lib/lxvst ]; then
 	export LXVST_PATH=$LXVST_PATH:$HOME/.local/lib/lxvst
 fi
-
