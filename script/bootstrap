@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+system_type=$(uname -s)
+
+declare -a desired_packages
+
+desired_packages+=(
+    'fzf'
+    'git'
+    'make'
+    'plocate'
+    'ripgrep'
+    'tmux'
+    'zoxide'
+    'zsh'
+)
+
+if [[ "Linux" == "$system_type" ]]; then
+    os_id=$(sed -n -r -e 's/^ID_LIKE=(.+)/\1/p' /etc/os-release)
+    [[ -z "$os_id" ]] && os_id=$(sed -n -r -e 's/^ID=(.+)/\1/p' /etc/os-release)
+fi
+
+unset yn;
+while [[ -z $(echo $yn | grep -E '[yYnN]') ]]; do
+    read -p "$* Is this a headless setup [y/n]: " yn
+    case $yn in
+        [Yy]*) want_headless=1;;
+        [Nn]*);;
+        *) ;;
+    esac
+done
+
+unset yn;
+while [[ -z $(echo $yn | grep -E '[yYnN]') ]]; do
+    read -p "$* Do you want to install emacs [y/n]: " yn
+    case $yn in
+        [Yy]*) want_emacs=1;;
+        [Nn]*);;
+        *) ;;
+    esac
+done
+
+[[ -x /usr/bin/wslinfo ]] && is_wsl;
+
+install_arch_packages() {
+    if [[ $want_emacs == 1 ]]; then
+        if [[ $want_headless ]]; then
+            desired_packages+=('emacs-nox')
+        else
+            if [[ -v WAYLAND_DISPLAY ]]; then
+                desired_packages+=('emacs-wayland')
+            else
+                desired_packages+=('emacs')
+            fi
+        fi
+    fi
+
+    # Install GUI packages
+    if [[ ! $want_headless ]]; then
+        if [[ -v WAYLAND_DISPLAY ]]; then
+            # Wayland packages
+            desired_packages+=()
+        else
+            # XOrg packages
+            desired_packages+=()
+        fi
+    fi
+
+    echo ${desired_packages[*]}
+
+    sudo pacman -S ${desired_packages[*]}
+}
+
+install_fedora_packages() {
+    if [[ $want_emacs == 1 ]]; then
+        desired_packages+=('pinentry-emacs')
+
+        if [[ $want_headless ]]; then
+            desired_packages+=('emacs-nw')
+        else
+            desired_packages+=('emacs')
+        fi
+    fi
+
+    echo ${desired_packages[*]}
+    if [[ -x /usr/bin/rpm-ostree ]]; then
+        sudo rpm-ostree install ${desired_packages[*]}
+    else
+        sudo dnf install ${desired_packages[*]}
+    fi
+}
+
+install_debian_packages() {
+    echo ${desired_packages[*]}
+    sudo apt install ${desired_packages[*]}
+}
+
+case $os_id in
+    arch)
+        install_arch_packages
+        ;;
+    fedora)
+        install_fedora_packages
+        ;;
+    debian)
+        install_debian_packages
+        ;;
+    **)
+esac
