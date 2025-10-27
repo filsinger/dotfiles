@@ -40,7 +40,7 @@ while [[ -z $(echo $yn | grep -E '[yYnN]') ]]; do
     esac
 done
 
-[[ -x /usr/bin/wslinfo ]] && is_wsl;
+[[ -x /usr/bin/wslinfo ]] && is_wsl=1;
 
 install_arch_packages() {
     if [[ $want_emacs == 1 ]]; then
