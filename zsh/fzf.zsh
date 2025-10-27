@@ -4,8 +4,10 @@
 [[ -f /etc/profile.d/fzf-extras.zsh ]] && source /etc/profile.d/fzf-extras.zsh
 
 if [ -x /usr/bin/fzf ]; then
-    # Set up fzf key bindings and fuzzy completion
-    source <(fzf --zsh)
+    if [[ $(/usr/bin/uname -r | /usr/bin/grep -o ARCH) != 'ARCH' ]]; then
+        # Set up fzf key bindings and fuzzy completion
+        source <(fzf --zsh)
+    fi
 
     if [[ -n "$PS1" ]]; then
         # Catppuccin Frappé Theme

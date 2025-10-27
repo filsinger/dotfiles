@@ -4,7 +4,7 @@
 export DOTFILES=$HOME/.dotfiles
 export PRIVATE_DOTFILES=$HOME/.private.dotfiles
 
-if [[ $(uname -r | grep -o ARCH) != 'ARCH' ]]; then
+if [[ $(/usr/bin/uname -r | /usr/bin/grep -o ARCH) != 'ARCH' ]]; then
 	source $DOTFILES/zsh/setpath.hack
 	export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/share:/usr/share:/var/lib/flatpak/exports/share"
 fi
