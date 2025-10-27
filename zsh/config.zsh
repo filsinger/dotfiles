@@ -170,4 +170,6 @@ if [[ -n "$PS1" ]]; then
 	fi
 
 	[[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+    [[ -x /usr/sbin/zoxide ]] && eval "$(/usr/sbin/zoxide init --cmd cd zsh)"
 fi
