@@ -73,7 +73,7 @@ install_arch_packages() {
 
 install_fedora_packages() {
     if [[ $want_emacs == 1 ]]; then
-        desired_packages+=('pinentry-emacs')
+        desired_packages+=('pinentry-emacs' 'gnupg2-scdaemon')
 
         if [[ $want_headless ]]; then
             desired_packages+=('emacs-nw')
@@ -83,8 +83,15 @@ install_fedora_packages() {
     fi
 
     echo ${desired_packages[*]}
-    if [[ -x /usr/bin/rpm-ostree ]]; then
-        sudo rpm-ostree install ${desired_packages[*]}
+    if [[ -x '/usr/bin/rpm-ostree' ]]; then
+        # skip any packages taht are already installed,
+        # rpm-ostree will stop if a requested package is already installed.
+        packages_to_install=()
+        for p in $desired_packages; do
+            /usr/bin/rpm-ostree status | grep "$p" 2> /dev/null
+            [[ $? ]] && packages_to_install+="$p"
+        done
+        sudo rpm-ostree install ${packages_to_install[*]}
     else
         sudo dnf install ${desired_packages[*]}
     fi
