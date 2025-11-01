@@ -22,7 +22,7 @@ if-shell "uname | grep -qi cygwin" "source-file ~/.dotfiles/tmux/tmux.conf.cygwi
 if-shell "uname | grep -qi Linux" "source-file ~/.dotfiles/tmux/tmux.conf.linux"
 
 # colors
-set -g default-terminal "screen-256color"
+set -g default-terminal "tmux-direct"
 
 # xterm keys
 setw -g xterm-keys on
@@ -58,5 +58,3 @@ set-option -g status on
 set-option -g status-justify "centre"
 set-option -g status-left-length 60
 set-option -g status-right-length 90
-
-
