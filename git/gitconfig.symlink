@@ -26,3 +26,5 @@
     wordRegex = [^,\n]+[,\n]|[,]
 [merge]
     conflictstyle = diff3
+[log]
+	date = default
