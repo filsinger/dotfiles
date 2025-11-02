@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 
 if [ $# -ne 3 ]; then
-   echo Usage: $0 local base other
+   echo Usage: "$0" local base other
    exit 1
 fi
-emacs-run --eval '(ediff-merge-with-ancestor "'$1'" "'$2'" "'$3'")'
+
+path_local=$(realpath "$1")
+path_base=$(realpath "$2")
+path_other=$(realpath "$3")
+
+if [[ -x /usr/bin/wslpath ]]; then
+    path_local=$(wslpath -m "$path_local")
+    path_base=$(wslpath -m "$path_base")
+    path_other=$(wslpath -m "$path_other")
+fi
+
+emacs-run --eval '(ediff-merge-with-ancestor "'"$path_local"'" "'"$path_base"'" "'"$path_other"'")'
