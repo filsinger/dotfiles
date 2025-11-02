@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+update_command_list_first=()
+update_command_list_second=()
+post_update_commands=()
+
+# Toolbox: If we have toolbox installed
+# try and build a list of commands to update
+# the containers
+if [[ -x /usr/bin/toolbox ]]; then
+    toolbox_list_regex='^([0-9a-f]+)[ ]+([^ ]+)[ ]+(.+)[ ]+(running|exited|created)[ ]+.+/(.+)-toolbox:.+$'
+
+    containers_list=$(toolbox list --containers | tail -n +2)
+
+    stopped_containers=("$(echo "${containers_list[@]}" | sed -n -r -e 's#^([0-9a-f]+)[ ]+([^ ]+)[ ]+(.+)[ ]+(exited|created)[ ]+(.+)$#\2#p' | tr '\n' ' ')")
+    toolbox_containers=("$(echo "${containers_list[@]}" | sed -n -r -e 's#'"$toolbox_list_regex"'#\2 \5#p')")
+
+    if [ ! -z "${stopped_containers[*]}" ]; then
+        #echo Stopping Containers: $(podman stop ${stopped_containers[@]} 2> /dev/null | tr '\n' ' ')
+        post_update_commands+=("echo Stopping Containers: ")
+        puc=(podman stop "${stopped_containers[*]}")
+        post_update_commands+=("${puc[*]}")
+    fi
+
+    while read -r container toolbox_image; do
+        c1=''
+        c2=''
+        case $toolbox_image in
+            arch)
+                c1=(toolbox run -c "${container}" sudo pacman -Syu --noconfirm)
+                #c2=(toolbox run -c "${container}" [[ -x /usr/sbin/pikaur ]]' pikaur -Syu --noconfirm)
+                ;;
+            fedora)
+                c1=(toolbox run -c "${container}" sudo dnf upgrade --assumeyes)
+                ;;
+            ubuntu)
+                c1=(toolbox run -c "${container}" sudo apt-get update)
+                c2=(toolbox run -c "${container}" sudo apt-get upgrade -y)
+                ;;
+        esac
+        [ ! -z "${c1[*]}" ] && update_command_list_first+=("${c1[*]}")
+        [ ! -z "${c2[*]}" ] && update_command_list_second+=("${c2[*]}")
+    done <<< "${toolbox_containers[@]}"
+fi
+
+if [[ -x /usr/bin/parallel ]]; then
+    echo "GNU Parallel found, updating containers in parallel"
+    parallel --verbose {} ::: "${update_command_list_first[@]}"
+    parallel --verbose {} ::: "${update_command_list_second[@]}"
+
+else
+    echo "GNU Parallel not found, updating containers sequentially"
+    update_commands=("${update_command_list_first[@]}" "${update_command_list_second[@]}")
+    for update_command in "${update_commands[@]}"; do
+        $update_command
+    done
+fi
+
+# Run post-update commands
+echo Update finished, runing post-update commands
+for post_update_command in "${post_update_commands[@]}"; do
+    $post_update_command
+done
+
+echo Done
+
+exit 0
