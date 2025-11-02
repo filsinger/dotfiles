@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 2 ]; then
+   echo Usage: "$0" file_a file_b
+   exit 1
+fi
+
+file_a=$(realpath "$1")
+file_b=$(realpath "$2")
+
+if [[ -x /usr/bin/wslpath ]]; then
+    file_a=$(wslpath -m "$file_a")
+    file_b=$(wslpath -m "$file_b")
+fi
+
+emacs-run --eval '(ediff-files "'"$file_a"'" "'"$file_b"'")'
