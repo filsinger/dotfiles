@@ -84,12 +84,12 @@ if [[ -n "$PS1" ]]; then
     }
 
 	autoload -Uz vcs_info
-	zstyle ':vcs_info:*' enable git hg
+	zstyle ':vcs_info:*' enable git
 	zstyle ':vcs_info:*' check-for-changes true
-	zstyle ':vcs_info:*' stagedstr '%F{240}| %F{40}•%f '
-	zstyle ':vcs_info:*' unstagedstr '%F{240}| %F{214}•%f '
-	zstyle ':vcs_info:git*' formats "%F{240}[%f %b %m%u%c%F{240}]%f"
-	zstyle ':vcs_info:*' actionformats '%F{240}[%f %b %m%u%c%F{240}|%f %a %F{240}]%f'
+	zstyle ':vcs_info:*' stagedstr '%F{black}| %F{yellow}•%f '
+	zstyle ':vcs_info:*' unstagedstr '%F{black}| %F{red}•%f '
+	zstyle ':vcs_info:git*' formats "%F{black}[%f %b %m%u%c%F{black}]%f"
+	zstyle ':vcs_info:*' actionformats '%F{black}[%f %b %m%u%c%F{black}|%f %a %F{black} ]%f'
 
 	function precmd() {
 		vcs_info
