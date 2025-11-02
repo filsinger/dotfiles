@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 movie_source="$1"
 movie_start_time="$2"
