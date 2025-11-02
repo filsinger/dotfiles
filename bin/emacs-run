@@ -3,6 +3,8 @@
 shopt -s globstar
 declare NO_WINDOW_SYSTEM
 declare -a EMACS_ADDITIONAL_ARGS
+declare FORCE_NEW_INSTANCE
+declare -a EMACS_ARGS
 
 # try and detect if we are running from a remote session
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
@@ -88,18 +90,28 @@ fi
 # Don't run emacs client if we havent passed any params
 (( $# == 0 )) && unset EMACSCLIENT_BIN
 
-if [[ -v EMACSCLIENT_BIN ]]; then
-    # Don't run emacs client if trying to evaluate an expression'
-    for arg in "$@"; do
-        if [[ $arg == *"--eval"* ]]; then
-            unset EMACSCLIENT_BIN
-            break
-        fi
-    done
-fi
+for arg in "$@"; do
+    case $arg in
+        *"--eval"*) # Don't run emacs client if trying to evaluate an expression'
+            FORCE_NEW_INSTANCE=1
+            EMACS_ARGS+=("$arg")
+            ;;
+        --new-instance) # Don't run emacs client if --new-instance is passed as an argument
+            FORCE_NEW_INSTANCE=1
+            ;;
+        *)
+            EMACS_ARGS+=("$arg")
+            ;;
+    esac
+done
+
+(( FORCE_NEW_INSTANCE == 1 )) && unset EMACSCLIENT_BIN
 
 # if we are running in ranger, don't use the windowing system
 [[ ! -z $RANGER_LEVEL ]] && NO_WINDOW_SYSTEM=1
+
+# if we are running in yazi, don't use the windowing system
+[[ ! -z $YAZI_LEVEL ]] && NO_WINDOW_SYSTEM=1
 
 # Don't use windowsing system if we launched in a way that should use the terminal
 (( NO_WINDOW_SYSTEM == 1 )) && EMACS_ADDITIONAL_ARGS+=('--no-window-system')
@@ -118,9 +130,9 @@ if [[ -n "$EMACS_BIN" ]]; then
         fi
 
         if [[ -v CONTAINER_COMMAND ]]; then
-            $CONTAINER_COMMAND "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "$@"
+            $CONTAINER_COMMAND "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "${EMACS_ARGS[@]}"
         else
-            "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "$@"
+            "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "${EMACS_ARGS[@]}"
         fi
 
         exit $?
@@ -129,9 +141,9 @@ if [[ -n "$EMACS_BIN" ]]; then
         # set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
         #export LSP_USE_PLISTS=true
         if [[ -v CONTAINER_COMMAND ]]; then
-            $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "$@"
+            $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "${EMACS_ARGS[@]}"
         else
-            "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "$@"
+            "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "${EMACS_ARGS[@]}"
         fi
         exit $?
     fi
