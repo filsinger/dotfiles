@@ -25,9 +25,47 @@ if [ -f ~/.localrc.bash ]; then
     . ~/.localrc.bash
 fi
 
+
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 if [ -f ~/.rvm/scripts/rvm ]; then
     . ~/.rvm/scripts/rvm
 elif [ -f /usr/local/rvm/scripts/rvm ]; then
     . ~/usr/local/rvm/scripts/rvm
+fi
+
+[[ -x /usr/bin/rbenv ]] && eval "$(rbenv init -)"
+
+if [[ -n "$PS1" ]]; then
+    alias edit='emacs-run'
+    case "$(uname)" in
+		Linux | cygwin | CYGWIN*)
+			alias ls='ls --color=auto'
+			;;
+	esac
+
+	case "$(uname)" in
+		Linux)
+			alias open='xdg-open'
+			;;
+	esac
+
+    [[ -x /usr/sbin/zoxide ]] && eval "$(/usr/sbin/zoxide init --cmd cd bash)"
+
+    if [ -x /usr/bin/fzf ]; then
+        if [[ $(/usr/bin/uname -r | /usr/bin/grep -o ARCH) != 'ARCH' ]]; then
+            # Set up fzf key bindings and fuzzy completion
+            source <(fzf --bash)
+        fi
+
+        if [[ -n "$PS1" ]]; then
+            # Catppuccin Frappé Theme
+            export FZF_DEFAULT_OPTS=" \
+--color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
+--color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
+--color=marker:#babbf1,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284 \
+--color=selected-bg:#51576d \
+--multi"
+        fi
+    fi
 fi
