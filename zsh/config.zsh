@@ -172,4 +172,6 @@ if [[ -n "$PS1" ]]; then
 	[[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
     [[ -x /usr/sbin/zoxide ]] && eval "$(/usr/sbin/zoxide init --cmd cd zsh)"
+
+    [[ -x /usr/bin/rbenv ]] && eval "$(rbenv init -)"
 fi
