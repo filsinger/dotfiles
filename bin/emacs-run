@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+shopt -s globstar
+declare NO_WINDOW_SYSTEM
+declare -a EMACS_ADDITIONAL_ARGS
+
 # try and detect if we are running from a remote session
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	SESSION_TYPE=remote/ssh
@@ -11,9 +15,7 @@ if [ -z "$SESSION_TYPE" ]; then
     case "$OSTYPE" in
         cygwin)
             # Check program files first
-            base_emacs_folder=$(cygpath -u 'c:/Program Files/Emacs')
-            for candidate in $(ls "$base_emacs_folder"); do
-                emacs_bin_folder="$base_emacs_folder/$candidate/bin"
+            for emacs_bin_folder in "$(cygpath -u 'c:/Program Files/Emacs')"/*/bin; do
                 if [[ -d "$emacs_bin_folder" ]]; then
                     [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
                     [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
@@ -43,9 +45,7 @@ if [ -z "$SESSION_TYPE" ]; then
         *)
             if [[ -x /usr/bin/wslpath ]]; then
                 # Running in WSL and not in an SSH session
-                base_emacs_folder=$(wslpath -u 'c:/Program Files/Emacs')
-                for candidate in $(ls "$base_emacs_folder"); do
-                    emacs_bin_folder="$base_emacs_folder/$candidate/bin"
+                for emacs_bin_folder in "$(wslpath -u 'c:/Program Files/Emacs')"/*/bin; do
                     if [[ -d "$emacs_bin_folder" ]]; then
                         [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACS_BIN="$emacs_bin_folder/emacs.exe"
                         [[ -x "$emacs_bin_folder/emacs.exe" ]] && EMACSCLIENT_BIN="$emacs_bin_folder/emacsclientw.exe"
@@ -78,36 +78,38 @@ if [ -z "$SESSION_TYPE" ]; then
     esac
 fi
 
-# If we haven't set an emacs binary based on platform, try and
-# run a default one (should the terminal version).
-if [[ -z $EMACS_BIN ]]; then
-    which emacs >> /dev/null
-    if [ $?  ]; then
-        EMACS_BIN=`(which emacs)`
-    fi
-
-    which emacsclient >> /dev/null
-    if [ -z "$EMACSCLIENT_BIN" ] && [ $? ]; then
-        EMACSCLIENT_BIN=`(which emacsclient)`
-    fi
+if [[ ! -v TOOLBOX_CONTAINER ]]; then
+    # If we haven't set an emacs binary based on platform, try and
+    # run a default one (should the terminal version).
+    [[ -x $EMACS_BIN ]] || EMACS_BIN=$(which emacs 2> /dev/null);
+    [[ -x $EMACSCLIENT_BIN ]] || EMACSCLIENT_BIN=$(which emacsclient 2> /dev/null)
 fi
 
 # Don't run emacs client if we havent passed any params
-if [[ -z "$@" ]]; then
-    EMACSCLIENT_BIN=
+(( $# == 0 )) && unset EMACSCLIENT_BIN
+
+if [[ -v EMACSCLIENT_BIN ]]; then
+    # Don't run emacs client if trying to evaluate an expression'
+    for arg in "$@"; do
+        if [[ $arg == *"--eval"* ]]; then
+            unset EMACSCLIENT_BIN
+            break
+        fi
+    done
 fi
 
-# Don't run emacs client if trying to evaluate an expression'
-if [[ "$@" == *--eval* ]]; then
-    EMACSCLIENT_BIN=
-fi
+# if we are running in ranger, don't use the windowing system
+[[ ! -z $RANGER_LEVEL ]] && NO_WINDOW_SYSTEM=1
+
+# Don't use windowsing system if we launched in a way that should use the terminal
+(( NO_WINDOW_SYSTEM == 1 )) && EMACS_ADDITIONAL_ARGS+=('--no-window-system')
 
 # Try and run emacs
-if [[ ! -z $EMACS_BIN ]]; then
-    if [ -n "$EMACSCLIENT_BIN" ] && [ -x "$EMACSCLIENT_BIN" ]; then
+if [[ -n "$EMACS_BIN" ]]; then
+    if [[ -n "$EMACSCLIENT_BIN" ]]; then
         echo "When done with a buffer, type C-x #"
 
-        if [[ "$SESSION_TYPE" != "remote/ssh" ]]; then
+        if [[ "$SESSION_TYPE" != "remote/ssh" ]] && [[ -z "$CONTAINER_COMMAND" ]]; then
             # The path of EMACS_BIN needs to be translated
             # if we are running in cygwin or wsl. Don't
             # translate if we are running in an SSH session
@@ -115,20 +117,21 @@ if [[ ! -z $EMACS_BIN ]]; then
             [[ -x /usr/bin/wslpath ]] && EMACS_BIN=$(wslpath -m "$EMACS_BIN")
         fi
 
-        if [[ -v CONTAINER_COMMAND ]] && [[ -x "$CONTAINER_COMMAND" ]]; then
-            $CONTAINER_COMMAND "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+        if [[ -v CONTAINER_COMMAND ]]; then
+            $CONTAINER_COMMAND "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "$@"
         else
-            "$EMACSCLIENT_BIN" --alternate-editor="$EMACS_BIN" "$@"
+            "$EMACSCLIENT_BIN" "${EMACS_ADDITIONAL_ARGS[@]}" --alternate-editor="$EMACS_BIN" "$@"
         fi
 
         exit $?
     else
+
         # set LSP_USE_PLISTS based on https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
         #export LSP_USE_PLISTS=true
         if [[ -v CONTAINER_COMMAND ]]; then
-            $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "$@"
+            $CONTAINER_COMMAND "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "$@"
         else
-            "$EMACS_BIN" --no-splash "$@"
+            "$EMACS_BIN" --no-splash "${EMACS_ADDITIONAL_ARGS[@]}" "$@"
         fi
         exit $?
     fi
