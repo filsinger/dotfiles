@@ -24,10 +24,10 @@ case $DESKTOP_SESSION in
                 echo 'ColorScheme=catppuccin-frappe'
                 echo ''
                 echo '[General]'
-                echo 'Environment=TERM=kterm-direct,COLORTERM=truecolor'
+                echo 'Environment=TERM=xterm-direct,COLORTERM=truecolor'
                 echo 'Name=Catppuccin Frappe'
                 echo 'Parent=FALLBACK/'
-            }  > "$KONSOLE_SHARE_FOLDER/Catppuccin\ Frappe.profile"
+            }  > "$KONSOLE_SHARE_FOLDER/Catppuccin Frappe.profile"
         fi
 
         ;;
