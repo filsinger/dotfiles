@@ -173,5 +173,8 @@ if [[ -n "$PS1" ]]; then
 
     [[ -x /usr/sbin/zoxide ]] && eval "$(/usr/sbin/zoxide init --cmd cd zsh)"
 
-    [[ -x /usr/bin/rbenv ]] && eval "$(rbenv init -)"
+    if [[ -x /usr/bin/rbenv ]]; then
+        eval "$(rbenv init - --no-rehash zsh)"
+        [[ -d "~/.rbenv/completions" ]] && FPATH="~/.rbenv/completions":"$FPATH"
+    fi
 fi
