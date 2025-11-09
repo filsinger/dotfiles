@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+# Simple FZF frontend to pass
+#
+# Initially based on passmenu but modified to fit my use case.
+#
+# Example of launching via alacritty via a window manager shortcut:
+# alacritty --title passmenu --class passmenu --command passmenu-fzf
+
+shopt -s nullglob globstar
+
+[[ -v WINDOWID ]] && niri msg action set-window-urgent --id "$WINDOWID"
+
+typeit=0
+if [[ $1 == "--type" ]]; then
+	typeit=1
+	shift
+fi
+
+if [[ -n $WAYLAND_DISPLAY ]]; then
+    xdotool="ydotool type --file -"
+    copytool='wl-copy -o -n'
+elif [[ -n $DISPLAY ]]; then
+	xdotool="xdotool type --clearmodifiers --file -"
+    copytool='xcopy'
+else
+	echo "Error: No Wayland or X11 display detected" >&2
+	exit 1
+fi
+
+prefix=${PASSWORD_STORE_DIR-~/.password-store}
+password_files=( "$prefix"/**/*.gpg )
+password_files=( "${password_files[@]#"$prefix"/}" )
+password_files=( "${password_files[@]%.gpg}" )
+
+SHORTCUT_PASSWORD='ctrl-p'
+SHORTCUT_URL='ctrl-u'
+SHORTCUT_OTP='ctrl-o'
+SHORTCUT_LOGIN='ctrl-l'
+SHORTCUT_CANCEL='ctrl-c'
+
+sel=$(printf '%s\n' "${password_files[@]}" | \
+          fzf --ignore-case \
+              --style=full \
+              --prompt="  " \
+              --no-multi \
+              --list-label="Password List" \
+              --ghost="Search Text" \
+              --input-label="Password Name" \
+              --color="input-fg:1,prompt:1,header-fg:5,current-hl:9,hl:1" \
+              --expect="$SHORTCUT_PASSWORD,$SHORTCUT_URL,$SHORTCUT_OTP,$SHORTCUT_LOGIN,esc,enter" \
+              --bind="$SHORTCUT_CANCEL:cancel" \
+              --header-label="Shortcuts" \
+              --header="Password ($SHORTCUT_PASSWORD)   OTP ($SHORTCUT_OTP)   URL ($SHORTCUT_URL)   Login ($SHORTCUT_LOGIN)" \
+              "$@")
+
+if [ $? -gt 0 ]; then
+    exit 1
+fi
+
+key=$(head -1 <<< "$sel")
+passname=$(tail -n +2 <<< "$sel")
+
+[[ -n $passname ]] || exit
+[[ "$key" == 'esc' ]] && exit
+
+echo " Waiting for GPG unlock..."
+
+case $key in
+    enter|"$SHORTCUT_PASSWORD") # Password
+        passresult=$(pass "$passname" | head -n 1)
+        ;;
+    "$SHORTCUT_URL") # URL
+        passresult=$(pass show "$passname" | sed -n -r -e 's#^(URL): (.+)$#\2#Ip' | head -n 1)
+        ;;
+    "$SHORTCUT_LOGIN") # Login
+        passresult=$(pass show "$passname" | sed -n -r -e 's#^(username|login|user): (.+)$#\2#Ip' | head -n 1)
+        ;;
+    "$SHORTCUT_OTP") # OTP
+        passresult=$(pass otp "$passname")
+        ;;
+esac
+
+[[ -n $passresult ]] || exit
+
+if [[ $typeit -eq 0 ]]; then
+    echo "$passresult" | $copytool 2>/dev/null
+else
+    echo "$passresult" | $xdotool 2>/dev/null
+fi
