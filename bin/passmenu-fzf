@@ -33,7 +33,7 @@ password_files=( "$prefix"/**/*.gpg )
 password_files=( "${password_files[@]#"$prefix"/}" )
 password_files=( "${password_files[@]%.gpg}" )
 
-SHORTCUT_PASSWORD='ctrl-p'
+SHORTCUT_PASSWORD='enter'
 SHORTCUT_URL='ctrl-u'
 SHORTCUT_OTP='ctrl-o'
 SHORTCUT_LOGIN='ctrl-l'
