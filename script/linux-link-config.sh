@@ -5,6 +5,16 @@ shopt -s nullglob globstar
 SOURCE_CONFIG_HOME=$(realpath "$(dirname "$0")/../config")
 TARGET_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
 
+if [[ ! -d "$SOURCE_CONFIG_HOME" ]]; then
+    echo "$SOURCE_CONFIG_HOME does not exist"
+    exit 1;
+fi
+
+if [[ ! -d "$TARGET_CONFIG_HOME" ]]; then
+    echo "$TARGET_CONFIG_HOME does not exist"
+    exit 1;
+fi
+
 for source_path in "$SOURCE_CONFIG_HOME"/**/*; do
     rel_path=${source_path#"$SOURCE_CONFIG_HOME/"}
     target_path="$TARGET_CONFIG_HOME/$rel_path"
@@ -15,8 +25,9 @@ for source_path in "$SOURCE_CONFIG_HOME"/**/*; do
                 if [[ ! -d "$subfile" ]]; then
                     if [[ ! -L "$subfile" ]]; then
                         echo "Adopging $subfile"
-                        echo mv "$subfile" "$source_path"
+                        mv "$subfile" "$source_path/$(basename "$subfile")"
                         echo "Linking $source_path/$(basename "$subfile")  ->  $subfile"
+                        ln -s "$source_path/$(basename "$subfile")" "$subfile"
                     fi
                 fi
             done
@@ -28,7 +39,7 @@ for source_path in "$SOURCE_CONFIG_HOME"/**/*; do
     elif [[ -f "$source_path" ]]; then
         if [[ ! -e "$target_path" ]]; then
             echo "Linking $source_path  ->  $target_path"
-            echo ln -s "$source_path" "$target_path"
+            ln -s "$source_path" "$target_path"
         fi
     fi
 done
