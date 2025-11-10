@@ -49,6 +49,9 @@ bind u capture-pane -J \; save-buffer /tmp/tmux-buffer \; new-window -n "urlview
 setw -g monitor-activity on
 set -g visual-activity on
 
+# window title
+set-option -g set-titles on
+
 # agressive resize
 setw -g aggressive-resize on
 
