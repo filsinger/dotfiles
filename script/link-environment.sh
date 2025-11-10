@@ -3,7 +3,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 TARGET_DIRECTORY="${XDG_CONFIG_HOME:-$HOME/.config}/environment.d"
-SOURCE_DIRECTORY=$(realpath "$SCRIPT_DIR/../environment.d")
+SOURCE_DIRECTORY=$(realpath "$SCRIPT_DIR/../config/environment.d")
 
 [[ ! -d "$TARGET_DIRECTORY" ]] && mkdir -p "$TARGET_DIRECTORY"
 
