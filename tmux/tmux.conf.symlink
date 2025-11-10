@@ -19,7 +19,8 @@ set -g pane-base-index 1 # Start pane numbering at 1
 # platform specific configs
 if-shell "uname | grep -qi Darwin" "source-file ~/.dotfiles/tmux/tmux.conf.osx"
 if-shell "uname | grep -qi cygwin" "source-file ~/.dotfiles/tmux/tmux.conf.cygwin"
-if-shell "uname | grep -qi Linux" "source-file ~/.dotfiles/tmux/tmux.conf.linux"
+if-shell "[[ -n $DISPLAY ]]" "source-file ~/.dotfiles/tmux/tmux.conf.linux.xorg"
+if-shell "[[ -n $WAYLAND_DISPLAY ]]" "source-file ~/.dotfiles/tmux/tmux.conf.linux.wayland"
 
 # colors
 set -g default-terminal "tmux-direct"

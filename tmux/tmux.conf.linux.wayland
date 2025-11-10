@@ -1,0 +1,9 @@
+# -*- mode: conf-space; -*-
+
+# linux specific configuration options
+
+# # copy
+if-shell '[[ -n $DISPLAY ]]' 'bind-key -T copy-mode M-w send-key -X copy-pipe-and-cancel "wl-copy -n"'
+# # paste
+if-shell '[[ -n $DISPLAY ]]' 'bind ] run "wl-paste -n | tmux load-buffer - ; tmux paste-buffer"'
+if-shell '[[ -n $DISPLAY ]]' 'bind-key C-y run "wl-paste -n | tmux load-buffer - ; tmux paste-buffer"'
