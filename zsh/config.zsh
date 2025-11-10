@@ -92,6 +92,7 @@ if [[ -n "$PS1" ]]; then
 	zstyle ':vcs_info:*' actionformats '%F{black}[%f %b %m%u%c%F{black}|%f %a %F{black} ]%f'
 
 	function precmd() {
+		title $PWD
 		vcs_info
 	}
 
