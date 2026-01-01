@@ -21,6 +21,8 @@ function download_and_install_font_zip() {
         curl -o "$TEMP_FILE" -L "$FONT_URL"
     fi
 
+    [[ ! -d "$TARGET_FONT_DIRECTORY" ]] && mkdir -p "$TARGET_FONT_DIRECTORY"
+
     if [[ -e "$TEMP_FILE" ]]; then
         unzip "$TEMP_FILE" -d "$TEMP_EXTRACTION_DIR" >> /dev/null
         mv -f "$TEMP_EXTRACTION_DIR"/*.ttf "$TARGET_FONT_DIRECTORY"
