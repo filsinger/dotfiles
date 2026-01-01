@@ -1,3 +1,5 @@
+# -*- mode: conf -*-
+
 [color]
     ui = true
 [git-p4]
