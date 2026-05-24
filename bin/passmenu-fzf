@@ -9,7 +9,13 @@
 
 shopt -s nullglob globstar
 
-[[ -v WINDOWID ]] && niri msg action set-window-urgent --id "$WINDOWID"
+case $XDG_SESSION_DESKTOP in
+     niri)
+          if [[ -x /usr/bin/niri ]]; then
+              [[ -v WINDOWID ]] && niri msg action set-window-urgent --id "$WINDOWID"
+          fi
+          ;;
+esac
 
 typeit=0
 if [[ $1 == "--type" ]]; then
