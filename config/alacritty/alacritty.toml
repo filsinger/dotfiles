@@ -4,6 +4,9 @@ import = [
 "catppuccin-frappe.toml",
 ]
 
+[env]
+TERM = "alacritty-direct"
+
 [window]
 opacity = 0.98
 blur = true
